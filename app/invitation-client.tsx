@@ -30,7 +30,7 @@ const EVENT = {
   name: "Maria Jose",
   date: new Date("2026-08-07T20:00:00"),
   dateLabel: "Viernes 7 de Agosto, 2026",
-  time: "5:00 PM",
+  time: "5:30 PM",
   venue: "Chalet el Derien",
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
   mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
@@ -146,45 +146,57 @@ function EnvelopeLogoIcon({ className, style }: { className?: string; style?: CS
 // ─── Dress Code Icons ─────────────────────────────────────────────────────────
 function TuxedoIcon({ className, style }: { className?: string; style?: CSSProperties }) {
   return (
-    <svg viewBox="0 0 60 80" className={className} style={style} fill="currentColor" aria-hidden>
+    <svg viewBox="0 0 60 96" className={className} style={style} fill="currentColor" aria-hidden>
       {/* Head */}
-      <ellipse cx="30" cy="10" rx="8" ry="9" />
-      {/* Shoulders / jacket */}
-      <path d="M10 30 C10 24 18 20 22 20 L30 26 L38 20 C42 20 50 24 50 30 L52 60 L8 60 Z" />
+      <ellipse cx="30" cy="9" rx="8" ry="8.5" />
+      {/* Shirt collar */}
+      <path d="M26 17 L30 22 L34 17 L36 20 L30 26 L24 20 Z" fill="rgba(255,255,255,0.85)" />
+      {/* Jacket body */}
+      <path d="M8 32 C8 25 17 20 22 19 L30 26 L38 19 C43 20 52 25 52 32 L54 64 L6 64 Z" />
       {/* Left lapel */}
-      <path d="M22 20 L26 32 L30 26 Z" fill="rgba(255,255,255,0.18)" />
+      <path d="M22 19 L27 33 L30 26 Z" fill="rgba(255,255,255,0.15)" />
       {/* Right lapel */}
-      <path d="M38 20 L34 32 L30 26 Z" fill="rgba(255,255,255,0.18)" />
-      {/* Bow-tie */}
-      <path d="M26 22 L28 25 L26 28 L30 25 L34 28 L32 25 L34 22 L30 25 Z" fill="rgba(255,255,255,0.55)" />
-      {/* Shirt buttons */}
-      <circle cx="30" cy="34" r="1.2" fill="rgba(255,255,255,0.4)" />
-      <circle cx="30" cy="40" r="1.2" fill="rgba(255,255,255,0.4)" />
-      <circle cx="30" cy="46" r="1.2" fill="rgba(255,255,255,0.4)" />
+      <path d="M38 19 L33 33 L30 26 Z" fill="rgba(255,255,255,0.15)" />
+      {/* Corbata (necktie) — wide classic tie */}
+      <path d="M28 22 L27 36 L28.5 52 L30 54 L31.5 52 L33 36 L32 22 L30 24 Z" fill="rgba(255,255,255,0.65)" />
+      {/* Tie knot */}
+      <path d="M28 22 L30 26 L32 22 L30 20 Z" fill="rgba(255,255,255,0.9)" />
+      {/* Pocket square */}
+      <path d="M44 30 L46 28 L48 30 L47 34 L44 34 Z" fill="rgba(255,255,255,0.35)" />
       {/* Trouser legs */}
-      <path d="M8 60 L14 80 L26 80 L30 66 L34 80 L46 80 L52 60 Z" />
+      <path d="M6 64 L13 96 L26 96 L30 76 L34 96 L47 96 L54 64 Z" />
+      {/* Trouser crease */}
+      <line x1="19" y1="64" x2="16" y2="96" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+      <line x1="41" y1="64" x2="44" y2="96" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
     </svg>
   );
 }
 
 function LongDressIcon({ className, style }: { className?: string; style?: CSSProperties }) {
   return (
-    <svg viewBox="0 0 60 90" className={className} style={style} fill="currentColor" aria-hidden>
+    <svg viewBox="0 0 60 100" className={className} style={style} fill="currentColor" aria-hidden>
       {/* Head */}
-      <ellipse cx="30" cy="9" rx="7.5" ry="8" />
-      {/* Neck & shoulders */}
-      <path d="M24 17 Q30 22 36 17 L40 28 Q35 24 30 26 Q25 24 20 28 Z" />
-      {/* Bodice */}
-      <path d="M20 28 Q25 24 30 26 Q35 24 40 28 L42 46 Q36 42 30 44 Q24 42 18 46 Z" />
-      {/* Sweetheart neckline detail */}
-      <path d="M26 19 Q30 24 34 19" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-      {/* Skirt — flowing A-line */}
-      <path d="M18 46 Q24 42 30 44 Q36 42 42 46 L52 88 L8 88 Z" />
-      {/* Skirt wave layers */}
-      <path d="M12 70 Q22 66 30 68 Q38 66 48 70" stroke="rgba(255,255,255,0.14)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M10 78 Q22 74 30 76 Q38 74 50 78" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* Belt / waist detail */}
-      <path d="M19 47 Q30 44 41 47" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <ellipse cx="30" cy="8.5" rx="7.5" ry="8" />
+      {/* Elegant updo / hair suggestion */}
+      <path d="M24 4 Q30 0 36 4 Q33 2 30 2 Q27 2 24 4 Z" fill="rgba(255,255,255,0.25)" />
+      {/* Bare shoulders / off-shoulder neckline */}
+      <path d="M14 22 Q18 18 24 17 Q30 19 36 17 Q42 18 46 22 L44 26 Q38 21 30 23 Q22 21 16 26 Z" />
+      {/* Fitted bodice */}
+      <path d="M16 26 Q22 21 30 23 Q38 21 44 26 L43 46 Q36 42 30 44 Q24 42 17 46 Z" />
+      {/* Neckline detail line */}
+      <path d="M20 19 Q30 24 40 19" stroke="rgba(255,255,255,0.28)" strokeWidth="1" fill="none" strokeLinecap="round" />
+      {/* Waist cinch */}
+      <path d="M17 46 Q30 42 43 46" stroke="rgba(255,255,255,0.35)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <rect x="24" y="45" width="12" height="4" rx="2" fill="rgba(255,255,255,0.2)" />
+      {/* Full ballgown skirt — A-line flaring wide */}
+      <path d="M17 48 Q24 44 30 46 Q36 44 43 48 C46 56 52 70 55 84 C57 92 54 98 30 98 C6 98 3 92 5 84 C8 70 14 56 17 48 Z" />
+      {/* Skirt layer lines (elegant flow) */}
+      <path d="M10 70 Q22 65 30 67 Q38 65 50 70" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path d="M7 82 Q20 77 30 79 Q40 77 53 82" stroke="rgba(255,255,255,0.09)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* Subtle lace/ruffle bottom */}
+      <path d="M6 90 Q14 87 22 90 Q30 87 38 90 Q46 87 54 90" stroke="rgba(255,255,255,0.15)" strokeWidth="1" fill="none" strokeLinecap="round" />
+      {/* Small decorative star on waist */}
+      <circle cx="30" cy="47" r="1.5" fill="rgba(255,255,255,0.5)" />
     </svg>
   );
 }
@@ -216,6 +228,72 @@ function SeahorseIcon({ className, style }: { className?: string; style?: CSSPro
       <path d="M22 36 C16 33 12 37 14 42 C17 40 19 37 22 39" fill="currentColor" opacity="0.6" />
       {/* Tail curl */}
       <path d="M26 82 C28 88 24 92 20 90 C16 88 16 84 19 82 C22 80 23 84 21 86" stroke="currentColor" strokeWidth="5.5" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// ─── Trident (Poseidon) ───────────────────────────────────────────────────────
+function TridentIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 60 100" className={className} style={style} fill="currentColor" aria-hidden>
+      {/* Center spike */}
+      <polygon points="30,2 26.5,18 33.5,18" />
+      {/* Left spike */}
+      <polygon points="12,8 9,22 16,22" />
+      {/* Right spike */}
+      <polygon points="48,8 44,22 51,22" />
+      {/* Left prong shaft */}
+      <rect x="11" y="21" width="5" height="26" rx="2" />
+      {/* Right prong shaft */}
+      <rect x="44" y="21" width="5" height="26" rx="2" />
+      {/* Center prong shaft (taller) */}
+      <rect x="27" y="17" width="6" height="64" rx="2.5" />
+      {/* Cross bar top */}
+      <rect x="9" y="44" width="42" height="5" rx="2.5" />
+      {/* Cross bar bottom */}
+      <rect x="14" y="52" width="32" height="3.5" rx="1.75" />
+      {/* Handle base orb */}
+      <ellipse cx="30" cy="87" rx="7" ry="4.5" opacity="0.7" />
+      <ellipse cx="30" cy="92" rx="4" ry="2" opacity="0.4" />
+    </svg>
+  );
+}
+
+// ─── Sand Dollar ──────────────────────────────────────────────────────────────
+function SandDollarIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 80 80" className={className} style={style} fill="currentColor" aria-hidden>
+      <circle cx="40" cy="40" r="36" />
+      {/* Inner ring */}
+      <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
+      {/* Petal pattern — 5 petals */}
+      <ellipse cx="40" cy="22" rx="4.5" ry="10" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="10" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" transform="rotate(72 40 40)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="10" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" transform="rotate(144 40 40)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="10" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" transform="rotate(216 40 40)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="10" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" transform="rotate(288 40 40)" />
+      {/* Center dot */}
+      <circle cx="40" cy="40" r="3.5" fill="rgba(255,255,255,0.3)" />
+    </svg>
+  );
+}
+
+// ─── Jellyfish ────────────────────────────────────────────────────────────────
+function JellyfishIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 70 90" className={className} style={style} fill="currentColor" aria-hidden>
+      {/* Bell / dome */}
+      <path d="M10 38 C10 18 20 8 35 8 C50 8 60 18 60 38 C60 44 58 48 54 50 C46 52 40 50 35 50 C30 50 24 52 16 50 C12 48 10 44 10 38 Z" />
+      {/* Inner dome highlight */}
+      <path d="M18 36 C18 22 25 14 35 14 C45 14 52 22 52 36" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="2" />
+      {/* Wave scallop bottom */}
+      <path d="M16 50 C20 56 24 54 28 50 C31 54 35 56 38 50 C41 54 45 56 48 50 C50 54 53 56 54 50" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      {/* Tentacles */}
+      <path d="M22 52 C21 62 23 70 20 80" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6" />
+      <path d="M28 53 C27 64 29 74 26 84" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5" />
+      <path d="M35 54 C35 65 35 75 34 87" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.7" />
+      <path d="M42 53 C43 64 41 74 44 84" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5" />
+      <path d="M48 52 C49 62 47 70 50 80" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6" />
     </svg>
   );
 }
@@ -295,17 +373,24 @@ function FallingEnvelopes() {
 
 // ─── Ocean debris (starfish + shells + seahorses floating in hero) ───────────
 const DEBRIS_CFG = [
-  { id: 0, type: "shell", top: "14%", left: "6%", size: 28, dur: 5.5, delay: 0 },
-  { id: 1, type: "star", top: "22%", left: "88%", size: 22, dur: 7, delay: 1.2 },
-  { id: 2, type: "shell", top: "70%", left: "10%", size: 20, dur: 6, delay: 2.1 },
-  { id: 3, type: "star", top: "65%", left: "80%", size: 18, dur: 8, delay: 0.8 },
-  { id: 4, type: "coral", top: "82%", left: "92%", size: 32, dur: 9, delay: 1.5 },
-  { id: 5, type: "shell", top: "40%", left: "96%", size: 16, dur: 5, delay: 3 },
-  { id: 6, type: "seaweed", top: "55%", left: "1%", size: 40, dur: 4, delay: 0.5 },
-  { id: 7, type: "seahorse", top: "30%", left: "4%", size: 30, dur: 6, delay: 1.8 },
-  { id: 8, type: "seahorse", top: "50%", left: "93%", size: 24, dur: 7.5, delay: 0.4 },
-  { id: 9, type: "shell", top: "88%", left: "50%", size: 18, dur: 8, delay: 4 },
-  { id: 10, type: "star", top: "10%", left: "45%", size: 14, dur: 9, delay: 2.5 },
+  { id: 0,  type: "shell",      top: "14%", left: "6%",  size: 28, dur: 5.5, delay: 0 },
+  { id: 1,  type: "star",       top: "22%", left: "88%", size: 22, dur: 7,   delay: 1.2 },
+  { id: 2,  type: "shell",      top: "70%", left: "10%", size: 20, dur: 6,   delay: 2.1 },
+  { id: 3,  type: "star",       top: "65%", left: "80%", size: 18, dur: 8,   delay: 0.8 },
+  { id: 4,  type: "coral",      top: "82%", left: "92%", size: 32, dur: 9,   delay: 1.5 },
+  { id: 5,  type: "shell",      top: "40%", left: "96%", size: 16, dur: 5,   delay: 3 },
+  { id: 6,  type: "seaweed",    top: "55%", left: "1%",  size: 40, dur: 4,   delay: 0.5 },
+  { id: 7,  type: "seahorse",   top: "30%", left: "4%",  size: 30, dur: 6,   delay: 1.8 },
+  { id: 8,  type: "seahorse",   top: "50%", left: "93%", size: 24, dur: 7.5, delay: 0.4 },
+  { id: 9,  type: "shell",      top: "88%", left: "50%", size: 18, dur: 8,   delay: 4 },
+  { id: 10, type: "star",       top: "10%", left: "45%", size: 14, dur: 9,   delay: 2.5 },
+  { id: 11, type: "sanddollar", top: "78%", left: "3%",  size: 26, dur: 7,   delay: 1.1 },
+  { id: 12, type: "sanddollar", top: "18%", left: "75%", size: 20, dur: 6.5, delay: 3.2 },
+  { id: 13, type: "jellyfish",  top: "42%", left: "90%", size: 34, dur: 8,   delay: 0.7 },
+  { id: 14, type: "jellyfish",  top: "60%", left: "2%",  size: 28, dur: 9,   delay: 2.8 },
+  { id: 15, type: "seahorse",   top: "6%",  left: "18%", size: 22, dur: 5.5, delay: 1.5 },
+  { id: 16, type: "coral",      top: "72%", left: "48%", size: 22, dur: 7,   delay: 3.5 },
+  { id: 17, type: "sanddollar", top: "35%", left: "52%", size: 15, dur: 11,  delay: 5 },
 ];
 
 function OceanDebris() {
@@ -325,6 +410,8 @@ function OceanDebris() {
         if (d.type === "star") return <motion.div key={d.id} {...shared}><StarfishIcon className="w-full h-full" /></motion.div>;
         if (d.type === "coral") return <motion.div key={d.id} {...shared}><CoralIcon className="w-full h-full" /></motion.div>;
         if (d.type === "seahorse") return <motion.div key={d.id} {...shared}><SeahorseIcon className="w-full h-full" /></motion.div>;
+        if (d.type === "sanddollar") return <motion.div key={d.id} {...shared}><SandDollarIcon className="w-full h-full" /></motion.div>;
+        if (d.type === "jellyfish") return <motion.div key={d.id} {...shared}><JellyfishIcon className="w-full h-full" /></motion.div>;
         if (d.type === "seaweed") return (
           <motion.div key={d.id}
             className="absolute"
@@ -728,13 +815,20 @@ export default function InvitationClient({ mode }: Props) {
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 2.1 }}
-              className="mt-8 inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 px-6 py-3 rounded-full"
-              style={{ background: "rgba(255,255,255,0.09)", border: "1px solid rgba(255,255,255,0.18)" }}>
-              <span className="text-xs tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.6)" }}>
-                {EVENT.dateLabel}
-              </span>
-              <span className="hidden sm:block w-px h-3" style={{ background: "rgba(255,255,255,0.3)" }} />
-              <span className="text-xs tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.6)" }}>
+              className="mt-8 flex flex-col items-center gap-2">
+              {/* Date highlight */}
+              <div className="relative px-8 py-3 rounded-full"
+                style={{
+                  background: "rgba(255,255,255,0.13)",
+                  border: "1px solid rgba(200,220,230,0.45)",
+                  boxShadow: "0 0 28px rgba(100,210,230,0.18), inset 0 1px 0 rgba(255,255,255,0.2)",
+                }}>
+                <span className="font-display italic text-base sm:text-lg tracking-wide"
+                  style={{ color: "var(--gold-light)", textShadow: "0 0 18px rgba(210,185,120,0.6)" }}>
+                  {EVENT.dateLabel}
+                </span>
+              </div>
+              <span className="text-[11px] tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.45)" }}>
                 {EVENT.time} — {EVENT.venue}
               </span>
             </motion.div>
@@ -761,12 +855,17 @@ export default function InvitationClient({ mode }: Props) {
 
         {/* ── COUNTDOWN ────────────────────────────────────────────────────── */}
         <section id="countdown" className="relative py-16 sm:py-20 px-4 sm:px-6 overflow-hidden" style={{ background: "var(--pearl)" }}>
-          {/* Floating seahorse left */}
           <div className="absolute left-2 top-1/2 -translate-y-1/2 opacity-[0.07] float" aria-hidden>
             <SeahorseIcon className="w-16 h-24" style={{ color: "var(--teal)" }} />
           </div>
           <div className="absolute right-3 bottom-4 opacity-[0.07] float-alt" aria-hidden>
             <ShellIcon className="w-14 h-14" style={{ color: "var(--aqua)" }} />
+          </div>
+          <div className="absolute left-1/4 top-4 opacity-[0.05] float" aria-hidden>
+            <SandDollarIcon className="w-12 h-12" style={{ color: "var(--teal)" }} />
+          </div>
+          <div className="absolute right-1/4 bottom-4 opacity-[0.05] float-alt" aria-hidden>
+            <JellyfishIcon className="w-10 h-14" style={{ color: "var(--aqua)" }} />
           </div>
           <Reveal className="max-w-md sm:max-w-lg mx-auto text-center">
             <p className="text-[11px] tracking-[0.3em] uppercase mb-2" style={{ color: "var(--aqua)" }}>
@@ -794,6 +893,12 @@ export default function InvitationClient({ mode }: Props) {
           <div className="absolute bottom-6 left-2 opacity-[0.08] float" aria-hidden>
             <StarfishIcon className="w-12 h-12" style={{ color: "var(--teal)" }} />
           </div>
+          <div className="absolute top-8 left-1/3 opacity-[0.06] float" aria-hidden>
+            <SandDollarIcon className="w-10 h-10" style={{ color: "var(--teal)" }} />
+          </div>
+          <div className="absolute bottom-8 right-1/4 opacity-[0.06] float-alt" aria-hidden>
+            <JellyfishIcon className="w-9 h-12" style={{ color: "var(--ocean)" }} />
+          </div>
           <div className="max-w-2xl mx-auto">
             <Reveal className="text-center mb-12">
               <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua)" }}>La velada</p>
@@ -804,7 +909,7 @@ export default function InvitationClient({ mode }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { icon: <Calendar className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
-                { icon: <Clock className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Hora", value: "5:00 PM", sub: "Puntual, por favor", delay: 0.2 },
+                { icon: <Clock className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Hora", value: "5:30 PM", sub: "Puntual, por favor", delay: 0.2 },
                 { icon: <MapPin className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
               ].map((c) => (
                 <Reveal key={c.label} delay={c.delay}>
@@ -827,14 +932,29 @@ export default function InvitationClient({ mode }: Props) {
         <WaveDivider from="var(--foam)" to="var(--deep)" double />
 
         {/* ── VESTIMENTA ───────────────────────────────────────────────────── */}
-        <section className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "var(--deep)" }}>
+        <section className="py-20 px-4 sm:px-6 relative overflow-hidden"
+          style={{ background: "linear-gradient(165deg, #050f18 0%, #081928 35%, #0a2030 65%, #040d15 100%)" }}>
           <Bubbles tint="rgba(80,160,190,0.35)" />
+          {/* Sand dollars subtle background */}
+          <div className="absolute top-10 left-6 opacity-[0.06] float" aria-hidden>
+            <SandDollarIcon className="w-24 h-24" style={{ color: "var(--silver)" }} />
+          </div>
+          <div className="absolute top-16 right-8 opacity-[0.06] float-alt" aria-hidden>
+            <SandDollarIcon className="w-20 h-20" style={{ color: "var(--aqua-pale)" }} />
+          </div>
           {/* Coral decorations on sides */}
-          <div className="absolute bottom-8 left-3 opacity-15 float-alt">
+          <div className="absolute bottom-8 left-3 opacity-20 float-alt">
             <CoralIcon className="w-14 h-20" style={{ color: "var(--aqua)" }} />
           </div>
-          <div className="absolute bottom-8 right-3 opacity-15 float" style={{ transform: "scaleX(-1)" }}>
+          <div className="absolute bottom-8 right-3 opacity-20 float" style={{ transform: "scaleX(-1)" }}>
             <CoralIcon className="w-12 h-16" style={{ color: "var(--silver)" }} />
+          </div>
+          {/* Seahorses flanking */}
+          <div className="absolute top-1/3 left-1 opacity-[0.08] float" aria-hidden>
+            <SeahorseIcon className="w-10 h-16" style={{ color: "var(--aqua-pale)" }} />
+          </div>
+          <div className="absolute top-1/3 right-1 opacity-[0.08] float-alt" aria-hidden>
+            <SeahorseIcon className="w-10 h-16" style={{ color: "var(--silver)" }} />
           </div>
 
           <div className="relative z-10 max-w-lg mx-auto">
@@ -848,21 +968,21 @@ export default function InvitationClient({ mode }: Props) {
               </p>
               <div className="flex items-center justify-center gap-8 mt-4">
                 <div className="flex flex-col items-center gap-2">
-                  <TuxedoIcon className="w-10 h-12 opacity-70" style={{ color: "var(--silver)" }} />
+                  <TuxedoIcon className="w-14 h-16 opacity-80" style={{ color: "var(--silver)" }} />
                   <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
                     Hombres
                   </span>
-                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
+                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.6)" }}>
                     Traje formal
                   </span>
                 </div>
-                <div className="w-px h-16 opacity-15" style={{ background: "white" }} />
+                <div className="w-px h-20 opacity-15" style={{ background: "white" }} />
                 <div className="flex flex-col items-center gap-2">
-                  <LongDressIcon className="w-10 h-12 opacity-70" style={{ color: "var(--aqua-pale)" }} />
+                  <LongDressIcon className="w-12 h-16 opacity-80" style={{ color: "var(--aqua-pale)" }} />
                   <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
                     Mujeres
                   </span>
-                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
+                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.6)" }}>
                     Vestido largo
                   </span>
                 </div>
@@ -873,7 +993,7 @@ export default function InvitationClient({ mode }: Props) {
             <div className="grid grid-cols-3 gap-3 mb-8">
               {/* Plata */}
               <Reveal delay={0.1}>
-                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(196,216,224,0.4)", boxShadow: "0 0 20px rgba(196,216,224,0.15)" }}>
                   <div className="h-24 sm:h-32 relative flex items-center justify-center"
                     style={{ background: "linear-gradient(135deg, #8aaab8 0%, #c4d8e0 35%, #eef4f7 50%, #c4d8e0 70%, #8aaab8 100%)" }}>
                     <div className="absolute inset-0 opacity-50"
@@ -891,7 +1011,7 @@ export default function InvitationClient({ mode }: Props) {
 
               {/* Azul Noche */}
               <Reveal delay={0.2}>
-                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(11,61,82,0.8)", boxShadow: "0 0 20px rgba(11,61,82,0.5)" }}>
                   <div className="h-24 sm:h-32 relative flex items-center justify-center"
                     style={{ background: "linear-gradient(135deg, #04121c 0%, #0b3d52 50%, #091e2c 100%)" }}>
                     <span className="font-display italic text-lg font-light text-white opacity-80">Noche</span>
@@ -906,7 +1026,7 @@ export default function InvitationClient({ mode }: Props) {
 
               {/* Celeste */}
               <Reveal delay={0.3}>
-                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(135,206,219,0.5)", boxShadow: "0 0 20px rgba(135,206,219,0.18)" }}>
                   <div className="h-24 sm:h-32 relative flex items-center justify-center"
                     style={{ background: "linear-gradient(135deg, #c8eaf5 0%, #87cedb 45%, #b8e4f0 100%)" }}>
                     <span className="font-display italic text-lg font-light"
@@ -945,9 +1065,15 @@ export default function InvitationClient({ mode }: Props) {
           <div className="absolute bottom-12 left-6 opacity-15 float">
             <StarfishIcon className="w-8 h-8" style={{ color: "white" }} />
           </div>
+          <div className="absolute top-6 left-4 opacity-15 float-alt" aria-hidden>
+            <JellyfishIcon className="w-10 h-14" style={{ color: "var(--gold-light)" }} />
+          </div>
+          <div className="absolute bottom-6 right-6 opacity-12 float" aria-hidden>
+            <SandDollarIcon className="w-12 h-12" style={{ color: "rgba(255,255,255,0.8)" }} />
+          </div>
           <div className="relative z-10 max-w-xl mx-auto text-center">
             <Reveal>
-              <ShellIcon className="w-14 h-14 mx-auto mb-8 shimmer" style={{ color: "var(--gold-light)" }} />
+              <TridentIcon className="w-12 h-16 mx-auto mb-8 shimmer" style={{ color: "var(--gold-light)" }} />
             </Reveal>
             <Reveal delay={0.15}>
               <blockquote className="font-display italic leading-relaxed text-white mb-8"
