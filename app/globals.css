@@ -1,0 +1,134 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&family=Dancing+Script:wght@500;600&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* === Deep Ocean Palette (High Contrast) === */
+  --pearl:         #f2ede6;
+  --sand:          #fceedd;
+  --foam:          #dff0f4;
+
+  --silver-light:  #dde7ed;
+  --silver:        #a8c0cc;
+  --silver-dark:   #7a9aaa;
+
+  --aqua-pale:     #b8dfe8;
+  --aqua:          #3aa4b8;
+  --teal:          #147080;
+  --ocean:         #0b3d52;
+  --deep:          #061824;
+
+  --coral:         #e8623a;
+  --gold:          #c8962a;
+  --gold-light:    #f0d080;
+
+  /* Text */
+  --text-dark:    #04141e;
+  --text-mid:     #2a5060;
+  --text-light:   #6a90a0;
+
+  /* Glass */
+  --glass-bg:      rgba(255,255,255,0.60);
+  --glass-border:  rgba(58,164,184,0.20);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--pearl);
+  color: var(--text-dark);
+  font-family: "Jost", system-ui, sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography ───────────────────────────────────────── */
+.font-display { font-family: "Cormorant Garamond", Georgia, serif; }
+.font-script  { font-family: "Dancing Script", cursive; }
+
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--foam); }
+::-webkit-scrollbar-thumb { background: var(--aqua); border-radius: 10px; }
+
+/* ── Wave slide ───────────────────────────────────────── */
+@keyframes waveSlide {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.wave-anim   { animation: waveSlide 14s linear infinite; }
+.wave-anim-2 { animation: waveSlide 20s linear reverse infinite; }
+
+/* ── Envelope fall ────────────────────────────────────── */
+@keyframes envelopeFall {
+  0%   { transform: translateY(-80px) rotate(var(--rot-start)); opacity: 0; }
+  6%   { opacity: 1; }
+  90%  { opacity: 0.75; }
+  100% { transform: translateY(110vh) rotate(var(--rot-end)); opacity: 0; }
+}
+
+/* ── Shimmer ──────────────────────────────────────────── */
+@keyframes shimmer {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+.shimmer { animation: shimmer 3s ease-in-out infinite; }
+
+/* ── Silver shine sweep ───────────────────────────────── */
+@keyframes silverShine {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.silver-shine {
+  background: linear-gradient(105deg,
+    #8aaab6 0%,
+    #c8dde4 30%,
+    #eef4f7 50%,
+    #c8dde4 70%,
+    #8aaab6 100%
+  );
+  background-size: 300% auto;
+  animation: silverShine 4s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Float ────────────────────────────────────────────── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+.float     { animation: floatY 5s ease-in-out infinite; }
+.float-alt { animation: floatY 7s ease-in-out 1.4s infinite; }
+
+/* ── Pulse glow ───────────────────────────────────────── */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(58,164,184,0); }
+  50%       { box-shadow: 0 0 28px 6px rgba(58,164,184,0.35); }
+}
+.pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
+
+/* ── Glass ────────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+/* ── Input base ───────────────────────────────────────── */
+input, textarea, select {
+  font-family: "Jost", sans-serif;
+  font-weight: 300;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--aqua);
+}
