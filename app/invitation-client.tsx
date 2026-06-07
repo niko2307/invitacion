@@ -32,9 +32,9 @@ const EVENT = {
   date: new Date("2026-08-07T20:00:00"),
   dateLabel: "Viernes 7 de Agosto, 2026",
   time: "8:00 PM",
-  venue: "Salón Las Olas",
-  address: "Costanera Norte 1234, Ciudad",
-  mapsUrl: "https://maps.google.com/?q=-34.6037,-58.3816",
+  venue: "Chalet el Derien",
+  address: "Cra. 9 #12-47, Cota, Cundinamarca",
+  mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
   transportAddress: "Plaza Central — Av. Principal 456",
   transportMapsUrl: "https://maps.google.com/?q=-34.6100,-58.3900",
 };
