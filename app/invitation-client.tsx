@@ -1026,13 +1026,13 @@ export default function InvitationClient({ mode }: Props) {
             </Reveal>
             <Reveal delay={0.2}>
               <p className="text-sm font-light leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>
-                Cada gesto de amor que traes contigo hace esta noche más especial. Si deseas honrarla con un regalo, un sobre es la forma más hermosa de hacerlo llegar.
+                Tu compañía es el obsequio más preciado de esta noche. Quienes deseen honrar este momento con un detalle adicional, encontrarán en el sobre la forma más elegante de expresarlo.
               </p>
               <div className="rounded-2xl px-5 py-4"
                 style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)" }}>
                 <Gift className="w-5 h-5 mx-auto mb-2" style={{ color: "var(--gold-light)" }} />
                 <p className="text-xs font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
-                  Tu presencia ya es el regalo más grande ✦ Los sobres estarán disponibles en el salón
+                  ✦ Con profundo agradecimiento por su presencia ✦
                 </p>
               </div>
             </Reveal>
