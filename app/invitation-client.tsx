@@ -31,7 +31,7 @@ const EVENT = {
   date: new Date("2026-08-07T20:00:00"),
   dateLabel: "Viernes 7 de Agosto, 2026",
   time: "5:30 PM",
-  venue: "Chalet el Derien",
+  venue: "Chalet El Darién",
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
   mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
   transportAddress: "Plaza Central — Av. Principal 456",
@@ -350,59 +350,6 @@ function SwimmingFish() {
   );
 }
 
-// ─── Beach horizon scene (decorative illustration) ────────────────────────────
-function BeachHorizonScene({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 800 160" className={className} fill="none" aria-hidden preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="bh-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#7ec8d8" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#3aa4b8" stopOpacity="0.12" />
-        </linearGradient>
-        <linearGradient id="bh-sea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#1a7888" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#0b3d52" stopOpacity="0.85" />
-        </linearGradient>
-        <linearGradient id="bh-sand" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#d4a96a" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#b8904a" stopOpacity="0.5" />
-        </linearGradient>
-        <radialGradient id="bh-sun" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#f0d080" stopOpacity="0.4" />
-          <stop offset="60%" stopColor="#f0d080" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="#f0d080" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {/* Sky */}
-      <rect width="800" height="95" fill="url(#bh-sky)" />
-      {/* Sun glow */}
-      <circle cx="400" cy="52" r="40" fill="url(#bh-sun)" />
-      <circle cx="400" cy="52" r="20" fill="rgba(240,208,128,0.18)" />
-      {/* Clouds */}
-      <ellipse cx="140" cy="28" rx="52" ry="16" fill="rgba(255,255,255,0.1)" />
-      <ellipse cx="165" cy="22" rx="32" ry="12" fill="rgba(255,255,255,0.07)" />
-      <ellipse cx="620" cy="34" rx="60" ry="18" fill="rgba(255,255,255,0.09)" />
-      <ellipse cx="648" cy="26" rx="38" ry="13" fill="rgba(255,255,255,0.06)" />
-      {/* Seagulls */}
-      <path d="M280,38 C284,34 290,34 294,38" stroke="rgba(255,255,255,0.28)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <path d="M300,28 C304,24 310,24 314,28" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M500,42 C504,38 510,38 514,42" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* Horizon line */}
-      <line x1="0" y1="96" x2="800" y2="96" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
-      {/* Sea */}
-      <rect x="0" y="96" width="800" height="44" fill="url(#bh-sea)" />
-      {/* Wave layers */}
-      <path d="M0,106 C80,100 160,112 240,106 C320,100 400,112 480,106 C560,100 640,112 720,106 L800,106 L800,118 L0,118 Z" fill="rgba(255,255,255,0.06)" />
-      <path d="M0,116 C100,110 200,122 300,116 C400,110 500,122 600,116 C700,110 760,118 800,116 L800,128 L0,128 Z" fill="rgba(255,255,255,0.04)" />
-      {/* Sand */}
-      <path d="M0,134 C100,126 200,140 350,132 C500,124 650,138 800,132 L800,160 L0,160 Z" fill="url(#bh-sand)" />
-      {/* Shells on sand */}
-      <ellipse cx="120" cy="148" rx="10" ry="5" fill="rgba(255,255,255,0.18)" />
-      <ellipse cx="680" cy="152" rx="8" ry="4" fill="rgba(255,255,255,0.14)" />
-      <ellipse cx="380" cy="145" rx="6" ry="3" fill="rgba(255,255,255,0.12)" />
-    </svg>
-  );
-}
 
 // ─── Underwater scene (seabed silhouette) ─────────────────────────────────────
 function UnderwaterScene({ className }: { className?: string }) {
@@ -914,15 +861,23 @@ export default function InvitationClient({ mode }: Props) {
 
         {/* ── HERO ─────────────────────────────────────────────────────────── */}
         <section ref={heroRef}
-          className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
-          style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 40%, var(--teal) 75%, var(--aqua) 100%)" }}>
+          className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
+          {/* Video background */}
+          <video autoPlay muted loop playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ zIndex: 0 }} aria-hidden>
+            <source src="/ocean-bg.mp4" type="video/mp4" />
+          </video>
+          {/* Deep overlay to keep readability */}
+          <div className="absolute inset-0" style={{ background: "rgba(3,14,22,0.52)", zIndex: 1 }} />
+
           <Bubbles tint="rgba(80,185,210,0.5)" />
           <SwimmingFish />
           <OceanDebris />
 
           {/* Glow orbs */}
           <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl opacity-15 float"
-            style={{ background: "var(--aqua)" }} />
+            style={{ background: "var(--aqua)", zIndex: 2 }} />
           <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl opacity-15 float-alt"
             style={{ background: "var(--coral)" }} />
 
@@ -942,8 +897,12 @@ export default function InvitationClient({ mode }: Props) {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 0.5, ease: EASE }}
-              className="font-display italic text-white leading-none mb-4"
-              style={{ fontSize: "clamp(3.2rem, 13vw, 7rem)" }}>
+              className="font-display italic font-semibold text-white leading-none mb-4"
+              style={{
+                fontSize: "clamp(3.8rem, 15vw, 9rem)",
+                textShadow: "0 0 50px rgba(240,208,128,0.55), 0 0 120px rgba(240,208,128,0.2), 0 6px 30px rgba(0,0,0,0.4)",
+                letterSpacing: "-0.01em",
+              }}>
               Maria Jose
             </motion.h1>
 
@@ -1034,51 +993,48 @@ export default function InvitationClient({ mode }: Props) {
           </Reveal>
         </section>
 
-        <WaveDivider from="var(--pearl)" to="var(--foam)" />
+        <WaveDivider from="var(--pearl)" to="var(--deep)" />
 
         {/* ── DETALLES ─────────────────────────────────────────────────────── */}
-        <section id="detalles" className="relative py-20 px-4 sm:px-6 overflow-hidden" style={{ background: "var(--foam)" }}>
-          <div className="absolute top-6 right-2 opacity-[0.08] float-alt" aria-hidden>
-            <SeahorseIcon className="w-12 h-20" style={{ color: "var(--ocean)" }} />
+        <section id="detalles" className="relative py-20 px-4 sm:px-6 overflow-hidden"
+          style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 40%, var(--teal) 75%, var(--aqua) 100%)" }}>
+          <Bubbles tint="rgba(80,185,210,0.4)" />
+          <div className="absolute top-6 right-2 opacity-[0.14] float-alt" aria-hidden>
+            <SeahorseIcon className="w-12 h-20" style={{ color: "var(--aqua-pale)" }} />
           </div>
-          <div className="absolute bottom-6 left-2 opacity-[0.08] float" aria-hidden>
-            <StarfishIcon className="w-12 h-12" style={{ color: "var(--teal)" }} />
+          <div className="absolute bottom-6 left-2 opacity-[0.14] float" aria-hidden>
+            <StarfishIcon className="w-12 h-12" style={{ color: "var(--gold-light)" }} />
           </div>
-          <div className="absolute top-8 left-1/3 opacity-[0.06] float" aria-hidden>
-            <SandDollarIcon className="w-10 h-10" style={{ color: "var(--teal)" }} />
+          <div className="absolute top-8 left-1/3 opacity-[0.1] float" aria-hidden>
+            <SandDollarIcon className="w-10 h-10" style={{ color: "var(--aqua-pale)" }} />
           </div>
-          <div className="absolute bottom-8 right-1/4 opacity-[0.06] float-alt" aria-hidden>
-            <JellyfishIcon className="w-9 h-12" style={{ color: "var(--ocean)" }} />
+          <div className="absolute bottom-8 right-1/4 opacity-[0.1] float-alt" aria-hidden>
+            <JellyfishIcon className="w-9 h-12" style={{ color: "var(--silver)" }} />
           </div>
-          <div className="max-w-2xl mx-auto">
+          <div className="relative max-w-2xl mx-auto z-10">
             <Reveal className="text-center mb-6">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>La velada</p>
-              <h2 className="font-display italic text-4xl sm:text-5xl" style={{ color: "var(--text-dark)" }}>
+              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>La velada</p>
+              <h2 className="font-display italic text-4xl sm:text-5xl text-white">
                 Una noche mágica
               </h2>
             </Reveal>
-            {/* Beach horizon illustration */}
-            <Reveal delay={0.05} className="mb-8">
-              <div className="rounded-3xl overflow-hidden opacity-80" style={{ boxShadow: "0 4px 24px rgba(11,61,82,0.12)" }}>
-                <BeachHorizonScene className="w-full h-28 sm:h-36" />
-              </div>
-            </Reveal>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                { icon: <Calendar className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
-                { icon: <Clock className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Hora", value: "5:30 PM", sub: "Puntual, por favor", delay: 0.2 },
-                { icon: <MapPin className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
+                { icon: <Calendar className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
+                { icon: <Clock className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Hora", value: "5:30 PM", sub: "Puntual, por favor", delay: 0.2 },
+                { icon: <MapPin className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
               ].map((c) => (
                 <Reveal key={c.label} delay={c.delay}>
-                  <motion.div whileHover={{ y: -6, boxShadow: "0 24px 48px rgba(11,61,82,0.16)" }}
-                    transition={{ duration: 0.3 }} className="glass rounded-3xl p-7 text-center cursor-default">
+                  <motion.div whileHover={{ y: -6, boxShadow: "0 24px 48px rgba(0,0,0,0.35)" }}
+                    transition={{ duration: 0.3 }} className="rounded-3xl p-7 text-center cursor-default"
+                    style={{ background: "rgba(4,20,30,0.55)", backdropFilter: "blur(18px)", border: "1px solid rgba(58,164,184,0.25)" }}>
                     <div className="w-12 h-12 rounded-2xl mx-auto mb-4 flex items-center justify-center"
-                      style={{ background: "var(--aqua-pale)" }}>
+                      style={{ background: "rgba(58,164,184,0.2)" }}>
                       {c.icon}
                     </div>
-                    <p className="text-[10px] tracking-[0.22em] uppercase mb-1" style={{ color: "var(--text-light)" }}>{c.label}</p>
-                    <p className="font-display text-xl font-medium mb-1" style={{ color: "var(--text-dark)" }}>{c.value}</p>
-                    <p className="text-sm" style={{ color: "var(--text-mid)" }}>{c.sub}</p>
+                    <p className="text-[10px] tracking-[0.22em] uppercase mb-1" style={{ color: "var(--aqua-pale)" }}>{c.label}</p>
+                    <p className="font-display text-xl font-medium mb-1 text-white">{c.value}</p>
+                    <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>{c.sub}</p>
                   </motion.div>
                 </Reveal>
               ))}
@@ -1086,65 +1042,77 @@ export default function InvitationClient({ mode }: Props) {
           </div>
         </section>
 
-        <WaveDivider from="var(--foam)" to="var(--deep)" double />
+        <WaveDivider from="var(--aqua)" to="var(--deep)" double />
 
         {/* ── VESTIMENTA ───────────────────────────────────────────────────── */}
-        <section className="py-20 px-4 sm:px-6 relative overflow-hidden"
-          style={{ background: "radial-gradient(ellipse 90% 70% at 50% 55%, #0d2e42 0%, #071622 45%, #030c14 100%)" }}>
-          <Bubbles tint="rgba(80,160,190,0.35)" />
+        <section className="py-20 px-4 sm:px-6 relative overflow-hidden">
+          {/* Video background */}
+          <video autoPlay muted loop playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ zIndex: 0 }} aria-hidden>
+            <source src="/vestimenta-bg.mp4" type="video/mp4" />
+          </video>
+          {/* Gradient overlay — dark at top/bottom, slightly lighter in center to let video breathe */}
+          <div className="absolute inset-0" style={{
+            background: "linear-gradient(180deg, rgba(3,12,20,0.72) 0%, rgba(4,18,28,0.55) 40%, rgba(4,18,28,0.58) 60%, rgba(3,12,20,0.75) 100%)",
+            zIndex: 1,
+          }} />
+
+          <Bubbles tint="rgba(80,160,190,0.25)" />
           <SwimmingFish />
-          {/* Underwater seabed scene at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden>
+
+          {/* Seabed at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: 2 }} aria-hidden>
             <UnderwaterScene className="w-full h-24 sm:h-32" />
           </div>
-          {/* Sand dollars subtle background */}
-          <div className="absolute top-10 left-6 opacity-[0.06] float" aria-hidden>
-            <SandDollarIcon className="w-24 h-24" style={{ color: "var(--silver)" }} />
+
+          {/* Decorative elements */}
+          <div className="absolute top-10 left-6 opacity-[0.18] float" style={{ zIndex: 2 }} aria-hidden>
+            <SandDollarIcon className="w-20 h-20" style={{ color: "var(--silver)" }} />
           </div>
-          <div className="absolute top-16 right-8 opacity-[0.06] float-alt" aria-hidden>
-            <SandDollarIcon className="w-20 h-20" style={{ color: "var(--aqua-pale)" }} />
+          <div className="absolute top-16 right-8 opacity-[0.15] float-alt" style={{ zIndex: 2 }} aria-hidden>
+            <SandDollarIcon className="w-16 h-16" style={{ color: "var(--aqua-pale)" }} />
           </div>
-          {/* Coral decorations on sides */}
-          <div className="absolute bottom-8 left-3 opacity-20 float-alt">
+          <div className="absolute bottom-8 left-3 opacity-30 float-alt" style={{ zIndex: 2 }}>
             <CoralIcon className="w-14 h-20" style={{ color: "var(--aqua)" }} />
           </div>
-          <div className="absolute bottom-8 right-3 opacity-20 float" style={{ transform: "scaleX(-1)" }}>
+          <div className="absolute bottom-8 right-3 opacity-25 float" style={{ transform: "scaleX(-1)", zIndex: 2 }}>
             <CoralIcon className="w-12 h-16" style={{ color: "var(--silver)" }} />
           </div>
-          {/* Seahorses flanking */}
-          <div className="absolute top-1/3 left-1 opacity-[0.08] float" aria-hidden>
+          <div className="absolute top-1/3 left-1 opacity-[0.2] float" style={{ zIndex: 2 }} aria-hidden>
             <SeahorseIcon className="w-10 h-16" style={{ color: "var(--aqua-pale)" }} />
           </div>
-          <div className="absolute top-1/3 right-1 opacity-[0.08] float-alt" aria-hidden>
+          <div className="absolute top-1/3 right-1 opacity-[0.18] float-alt" style={{ zIndex: 2 }} aria-hidden>
             <SeahorseIcon className="w-10 h-16" style={{ color: "var(--silver)" }} />
           </div>
 
           <div className="relative z-10 max-w-lg mx-auto">
             <Reveal className="text-center mb-12">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua)" }}>Dress Code</p>
-              <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-4">
+              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>Dress Code</p>
+              <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-4"
+                style={{ textShadow: "0 2px 24px rgba(0,0,0,0.5)" }}>
                 Código de Vestimenta
               </h2>
-              <p className="text-sm font-light mb-2" style={{ color: "rgba(255,255,255,0.55)" }}>
+              <p className="text-sm font-light mb-2" style={{ color: "rgba(255,255,255,0.7)" }}>
                 Te pedimos asistir de manera formal
               </p>
               <div className="flex items-center justify-center gap-8 mt-4">
                 <div className="flex flex-col items-center gap-2">
-                  <TuxedoIcon className="w-14 h-16 opacity-80" style={{ color: "var(--silver)" }} />
-                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  <TuxedoIcon className="w-14 h-16" style={{ color: "var(--silver)", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }} />
+                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
                     Hombres
                   </span>
-                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
                     Traje formal
                   </span>
                 </div>
-                <div className="w-px h-20 opacity-15" style={{ background: "white" }} />
+                <div className="w-px h-20 opacity-25" style={{ background: "white" }} />
                 <div className="flex flex-col items-center gap-2">
-                  <LongDressIcon className="w-12 h-16 opacity-80" style={{ color: "var(--aqua-pale)" }} />
-                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  <LongDressIcon className="w-12 h-16" style={{ color: "var(--aqua-pale)", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }} />
+                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
                     Mujeres
                   </span>
-                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
                     Vestido largo
                   </span>
                 </div>
@@ -1362,13 +1330,19 @@ export default function InvitationClient({ mode }: Props) {
         <WaveDivider from="var(--foam)" to="var(--deep)" double />
 
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
-        <footer className="relative py-16 px-4 sm:px-6 text-center overflow-hidden"
-          style={{ background: "linear-gradient(175deg, var(--deep) 0%, var(--ocean) 60%, var(--teal) 100%)" }}>
+        <footer className="relative py-16 px-4 sm:px-6 text-center overflow-hidden">
+          {/* Same hero video for contrast */}
+          <video autoPlay muted loop playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ zIndex: 0 }} aria-hidden>
+            <source src="/ocean-bg.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0" style={{ background: "rgba(3,12,20,0.65)", zIndex: 1 }} />
           <Bubbles tint="rgba(80,185,210,0.3)" />
-          <div className="absolute bottom-0 left-4 opacity-10 float">
+          <div className="absolute bottom-0 left-4 opacity-20 float" style={{ zIndex: 2 }}>
             <SeaweedIcon className="w-8 h-12" style={{ color: "var(--aqua-pale)" }} />
           </div>
-          <div className="absolute bottom-0 right-6 opacity-10 float-alt" style={{ transform: "scaleX(-1)" }}>
+          <div className="absolute bottom-0 right-6 opacity-18 float-alt" style={{ transform: "scaleX(-1)", zIndex: 2 }}>
             <SeaweedIcon className="w-10 h-16" style={{ color: "var(--aqua-pale)" }} />
           </div>
           <div className="relative z-10">
