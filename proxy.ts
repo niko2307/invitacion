@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(_request: NextRequest) {
   const res = NextResponse.next();
 
   // Prevent clickjacking
