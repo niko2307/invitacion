@@ -575,6 +575,15 @@ function RSVPModal({ onClose }: { onClose: () => void }) {
     transporte: "" as "" | "si" | "no",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom after new fields animate in so the submit button stays visible
+  useEffect(() => {
+    const id = setTimeout(() => {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    }, 420);
+    return () => clearTimeout(id);
+  }, [form.tipo, form.asiste, form.transporte]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -654,7 +663,7 @@ function RSVPModal({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Body */}
-        <div className="overflow-y-auto px-6 pb-8" style={{ maxHeight: "75dvh" }}>
+        <div ref={scrollRef} className="overflow-y-auto px-6 pb-8" style={{ maxHeight: "75dvh" }}>
           <AnimatePresence mode="wait">
             {status === "success" ? (
               <motion.div key="ok"
