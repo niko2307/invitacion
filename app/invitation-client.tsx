@@ -298,6 +298,156 @@ function JellyfishIcon({ className, style }: { className?: string; style?: CSSPr
   );
 }
 
+// ─── Fish ─────────────────────────────────────────────────────────────────────
+function FishIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 64 34" className={className} style={style} fill="currentColor" aria-hidden>
+      <ellipse cx="27" cy="17" rx="19" ry="11" />
+      {/* Tail fin */}
+      <path d="M8 17 L0 6 L0 28 Z" />
+      {/* Dorsal fin */}
+      <path d="M24 6 C28 1 35 3 32 8" opacity="0.65" />
+      {/* Pectoral fin */}
+      <path d="M28 20 C30 25 23 27 20 23" opacity="0.55" />
+      {/* Eye */}
+      <circle cx="38" cy="13" r="2.8" fill="rgba(255,255,255,0.9)" />
+      <circle cx="38.5" cy="13" r="1.3" fill="rgba(0,20,40,0.85)" />
+      {/* Scales */}
+      <path d="M20 11 Q25 13 20 15" stroke="rgba(255,255,255,0.2)" strokeWidth="1" fill="none" />
+      <path d="M27 10 Q32 12 27 14" stroke="rgba(255,255,255,0.2)" strokeWidth="1" fill="none" />
+    </svg>
+  );
+}
+
+const FISH_CFG = Array.from({ length: 6 }, (_, i) => ({
+  id: i,
+  top: `${10 + (i * 15) % 72}%`,
+  size: 30 + (i * 9) % 30,
+  duration: 22 + (i * 5) % 14,
+  delay: (i * 3.8) % 16,
+  ltr: i % 2 === 0,
+  opacity: 0.1 + (i * 0.028) % 0.14,
+}));
+
+function SwimmingFish() {
+  const [on, setOn] = useState(false);
+  useEffect(() => setOn(true), []);
+  if (!on) return null;
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+      {FISH_CFG.map((f) => (
+        <motion.div key={f.id} className="absolute" style={{ top: f.top, left: 0, width: f.size }}
+          animate={f.ltr
+            ? { x: ["-15vw", "115vw"], opacity: [0, f.opacity, f.opacity, 0] }
+            : { x: ["115vw", "-15vw"], opacity: [0, f.opacity, f.opacity, 0] }
+          }
+          transition={{ duration: f.duration, delay: f.delay, repeat: Infinity, ease: "linear" }}>
+          <FishIcon className="w-full h-auto"
+            style={{ color: "rgba(180,230,242,0.9)", transform: f.ltr ? undefined : "scaleX(-1)" }} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Beach horizon scene (decorative illustration) ────────────────────────────
+function BeachHorizonScene({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 800 160" className={className} fill="none" aria-hidden preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="bh-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#7ec8d8" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#3aa4b8" stopOpacity="0.12" />
+        </linearGradient>
+        <linearGradient id="bh-sea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1a7888" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#0b3d52" stopOpacity="0.85" />
+        </linearGradient>
+        <linearGradient id="bh-sand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#d4a96a" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#b8904a" stopOpacity="0.5" />
+        </linearGradient>
+        <radialGradient id="bh-sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#f0d080" stopOpacity="0.4" />
+          <stop offset="60%" stopColor="#f0d080" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#f0d080" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {/* Sky */}
+      <rect width="800" height="95" fill="url(#bh-sky)" />
+      {/* Sun glow */}
+      <circle cx="400" cy="52" r="40" fill="url(#bh-sun)" />
+      <circle cx="400" cy="52" r="20" fill="rgba(240,208,128,0.18)" />
+      {/* Clouds */}
+      <ellipse cx="140" cy="28" rx="52" ry="16" fill="rgba(255,255,255,0.1)" />
+      <ellipse cx="165" cy="22" rx="32" ry="12" fill="rgba(255,255,255,0.07)" />
+      <ellipse cx="620" cy="34" rx="60" ry="18" fill="rgba(255,255,255,0.09)" />
+      <ellipse cx="648" cy="26" rx="38" ry="13" fill="rgba(255,255,255,0.06)" />
+      {/* Seagulls */}
+      <path d="M280,38 C284,34 290,34 294,38" stroke="rgba(255,255,255,0.28)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <path d="M300,28 C304,24 310,24 314,28" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path d="M500,42 C504,38 510,38 514,42" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* Horizon line */}
+      <line x1="0" y1="96" x2="800" y2="96" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+      {/* Sea */}
+      <rect x="0" y="96" width="800" height="44" fill="url(#bh-sea)" />
+      {/* Wave layers */}
+      <path d="M0,106 C80,100 160,112 240,106 C320,100 400,112 480,106 C560,100 640,112 720,106 L800,106 L800,118 L0,118 Z" fill="rgba(255,255,255,0.06)" />
+      <path d="M0,116 C100,110 200,122 300,116 C400,110 500,122 600,116 C700,110 760,118 800,116 L800,128 L0,128 Z" fill="rgba(255,255,255,0.04)" />
+      {/* Sand */}
+      <path d="M0,134 C100,126 200,140 350,132 C500,124 650,138 800,132 L800,160 L0,160 Z" fill="url(#bh-sand)" />
+      {/* Shells on sand */}
+      <ellipse cx="120" cy="148" rx="10" ry="5" fill="rgba(255,255,255,0.18)" />
+      <ellipse cx="680" cy="152" rx="8" ry="4" fill="rgba(255,255,255,0.14)" />
+      <ellipse cx="380" cy="145" rx="6" ry="3" fill="rgba(255,255,255,0.12)" />
+    </svg>
+  );
+}
+
+// ─── Underwater scene (seabed silhouette) ─────────────────────────────────────
+function UnderwaterScene({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 800 120" className={className} fill="none" aria-hidden preserveAspectRatio="xMidYMid slice">
+      {/* Light rays */}
+      <path d="M180,0 L150,80" stroke="rgba(100,210,230,0.07)" strokeWidth="36" />
+      <path d="M350,0 L370,100" stroke="rgba(100,210,230,0.05)" strokeWidth="28" />
+      <path d="M580,0 L555,90" stroke="rgba(100,210,230,0.06)" strokeWidth="32" />
+      {/* Seabed floor */}
+      <path d="M0,88 C80,80 160,92 260,84 C360,76 440,90 540,82 C640,74 720,86 800,80 L800,120 L0,120 Z" fill="rgba(4,12,22,0.9)" />
+      {/* Left coral cluster */}
+      <path d="M70,88 L70,62 M70,62 C70,62 60,50 54,38 M70,62 C70,62 80,50 86,38 M70,72 C70,72 58,64 50,54 M70,72 C70,72 82,64 90,54"
+        stroke="rgba(232,98,58,0.55)" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="54" cy="38" r="5" fill="rgba(232,98,58,0.45)" />
+      <circle cx="86" cy="38" r="5" fill="rgba(232,98,58,0.45)" />
+      <circle cx="50" cy="54" r="4" fill="rgba(232,98,58,0.4)" />
+      <circle cx="90" cy="54" r="4" fill="rgba(232,98,58,0.4)" />
+      {/* Seaweed left */}
+      <path d="M160,88 C160,72 148,60 158,46 C168,32 150,20 156,8" stroke="rgba(46,140,70,0.45)" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M176,88 C176,75 188,62 178,48 C168,34 182,22 176,10" stroke="rgba(46,140,70,0.38)" strokeWidth="3" strokeLinecap="round" fill="none" />
+      <path d="M164,60 C154,56 148,64 154,70" stroke="rgba(46,140,70,0.35)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      {/* Center sand dollar */}
+      <circle cx="400" cy="98" r="14" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      <ellipse cx="400" cy="88" rx="4" ry="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+      <ellipse cx="400" cy="88" rx="4" ry="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" transform="rotate(72 400 98)" />
+      <ellipse cx="400" cy="88" rx="4" ry="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" transform="rotate(144 400 98)" />
+      <ellipse cx="400" cy="88" rx="4" ry="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" transform="rotate(216 400 98)" />
+      <ellipse cx="400" cy="88" rx="4" ry="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" transform="rotate(288 400 98)" />
+      {/* Right coral cluster — aqua tones */}
+      <path d="M660,85 L660,56 M660,56 C660,56 650,44 644,30 M660,56 C660,56 670,44 676,30 M660,68 C660,68 648,60 642,48 M660,68 C660,68 672,60 678,48"
+        stroke="rgba(58,164,184,0.5)" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="644" cy="30" r="5" fill="rgba(58,164,184,0.4)" />
+      <circle cx="676" cy="30" r="5" fill="rgba(58,164,184,0.4)" />
+      {/* Seaweed right */}
+      <path d="M740,85 C740,70 752,58 742,44 C732,30 746,18 740,6" stroke="rgba(46,140,70,0.4)" strokeWidth="3" strokeLinecap="round" fill="none" />
+      {/* Bubbles */}
+      <circle cx="110" cy="48" r="4" fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth="1" />
+      <circle cx="310" cy="35" r="5" fill="none" stroke="rgba(255,255,255,0.11)" strokeWidth="1" />
+      <circle cx="520" cy="42" r="3.5" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      <circle cx="700" cy="30" r="4" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+    </svg>
+  );
+}
+
 // ─── Wave divider ─────────────────────────────────────────────────────────────
 function WaveDivider({ from, to, double = false }: { from: string; to: string; double?: boolean }) {
   return (
@@ -767,6 +917,7 @@ export default function InvitationClient({ mode }: Props) {
           className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
           style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 40%, var(--teal) 75%, var(--aqua) 100%)" }}>
           <Bubbles tint="rgba(80,185,210,0.5)" />
+          <SwimmingFish />
           <OceanDebris />
 
           {/* Glow orbs */}
@@ -868,7 +1019,7 @@ export default function InvitationClient({ mode }: Props) {
             <JellyfishIcon className="w-10 h-14" style={{ color: "var(--aqua)" }} />
           </div>
           <Reveal className="max-w-md sm:max-w-lg mx-auto text-center">
-            <p className="text-[11px] tracking-[0.3em] uppercase mb-2" style={{ color: "var(--aqua)" }}>
+            <p className="text-[11px] tracking-[0.3em] uppercase mb-2" style={{ color: "var(--ocean)" }}>
               Cuenta regresiva
             </p>
             <h2 className="font-display italic text-3xl sm:text-4xl mb-10" style={{ color: "var(--text-dark)" }}>
@@ -900,11 +1051,17 @@ export default function InvitationClient({ mode }: Props) {
             <JellyfishIcon className="w-9 h-12" style={{ color: "var(--ocean)" }} />
           </div>
           <div className="max-w-2xl mx-auto">
-            <Reveal className="text-center mb-12">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua)" }}>La velada</p>
+            <Reveal className="text-center mb-6">
+              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>La velada</p>
               <h2 className="font-display italic text-4xl sm:text-5xl" style={{ color: "var(--text-dark)" }}>
                 Una noche mágica
               </h2>
+            </Reveal>
+            {/* Beach horizon illustration */}
+            <Reveal delay={0.05} className="mb-8">
+              <div className="rounded-3xl overflow-hidden opacity-80" style={{ boxShadow: "0 4px 24px rgba(11,61,82,0.12)" }}>
+                <BeachHorizonScene className="w-full h-28 sm:h-36" />
+              </div>
             </Reveal>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
@@ -933,8 +1090,13 @@ export default function InvitationClient({ mode }: Props) {
 
         {/* ── VESTIMENTA ───────────────────────────────────────────────────── */}
         <section className="py-20 px-4 sm:px-6 relative overflow-hidden"
-          style={{ background: "linear-gradient(165deg, #050f18 0%, #081928 35%, #0a2030 65%, #040d15 100%)" }}>
+          style={{ background: "radial-gradient(ellipse 90% 70% at 50% 55%, #0d2e42 0%, #071622 45%, #030c14 100%)" }}>
           <Bubbles tint="rgba(80,160,190,0.35)" />
+          <SwimmingFish />
+          {/* Underwater seabed scene at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden>
+            <UnderwaterScene className="w-full h-24 sm:h-32" />
+          </div>
           {/* Sand dollars subtle background */}
           <div className="absolute top-10 left-6 opacity-[0.06] float" aria-hidden>
             <SandDollarIcon className="w-24 h-24" style={{ color: "var(--silver)" }} />
@@ -1104,7 +1266,7 @@ export default function InvitationClient({ mode }: Props) {
           <section id="rsvp" className="py-20 px-4 sm:px-6" style={{ background: "var(--sand)" }}>
             <div className="max-w-md mx-auto text-center">
               <Reveal>
-                <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua)" }}>RSVP</p>
+                <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>RSVP</p>
                 <h2 className="font-display italic text-4xl sm:text-5xl mb-4" style={{ color: "var(--text-dark)" }}>
                   ¿Nos acompañas?
                 </h2>
@@ -1171,7 +1333,7 @@ export default function InvitationClient({ mode }: Props) {
         <section id="ubicacion" className="py-20 px-4 sm:px-6" style={{ background: "var(--foam)" }}>
           <div className="max-w-md mx-auto text-center">
             <Reveal className="mb-10">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua)" }}>¿Cómo llegar?</p>
+              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>¿Cómo llegar?</p>
               <h2 className="font-display italic text-4xl sm:text-5xl" style={{ color: "var(--text-dark)" }}>
                 Ubicación
               </h2>
