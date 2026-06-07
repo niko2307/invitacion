@@ -20,7 +20,6 @@ import {
   ExternalLink, Anchor, Sparkles, Gift, X, Bus,
 } from "lucide-react";
 import Lenis from "lenis";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type Mode = "confirmacion" | "invitacion";
@@ -31,7 +30,7 @@ const EVENT = {
   name: "Maria Jose",
   date: new Date("2026-08-07T20:00:00"),
   dateLabel: "Viernes 7 de Agosto, 2026",
-  time: "8:00 PM",
+  time: "5:00 PM",
   venue: "Chalet el Derien",
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
   mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
@@ -140,6 +139,52 @@ function EnvelopeLogoIcon({ className, style }: { className?: string; style?: CS
           <stop offset="100%" stopColor="#1a7888" />
         </linearGradient>
       </defs>
+    </svg>
+  );
+}
+
+// ─── Dress Code Icons ─────────────────────────────────────────────────────────
+function TuxedoIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 60 80" className={className} style={style} fill="currentColor" aria-hidden>
+      {/* Head */}
+      <ellipse cx="30" cy="10" rx="8" ry="9" />
+      {/* Shoulders / jacket */}
+      <path d="M10 30 C10 24 18 20 22 20 L30 26 L38 20 C42 20 50 24 50 30 L52 60 L8 60 Z" />
+      {/* Left lapel */}
+      <path d="M22 20 L26 32 L30 26 Z" fill="rgba(255,255,255,0.18)" />
+      {/* Right lapel */}
+      <path d="M38 20 L34 32 L30 26 Z" fill="rgba(255,255,255,0.18)" />
+      {/* Bow-tie */}
+      <path d="M26 22 L28 25 L26 28 L30 25 L34 28 L32 25 L34 22 L30 25 Z" fill="rgba(255,255,255,0.55)" />
+      {/* Shirt buttons */}
+      <circle cx="30" cy="34" r="1.2" fill="rgba(255,255,255,0.4)" />
+      <circle cx="30" cy="40" r="1.2" fill="rgba(255,255,255,0.4)" />
+      <circle cx="30" cy="46" r="1.2" fill="rgba(255,255,255,0.4)" />
+      {/* Trouser legs */}
+      <path d="M8 60 L14 80 L26 80 L30 66 L34 80 L46 80 L52 60 Z" />
+    </svg>
+  );
+}
+
+function LongDressIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 60 90" className={className} style={style} fill="currentColor" aria-hidden>
+      {/* Head */}
+      <ellipse cx="30" cy="9" rx="7.5" ry="8" />
+      {/* Neck & shoulders */}
+      <path d="M24 17 Q30 22 36 17 L40 28 Q35 24 30 26 Q25 24 20 28 Z" />
+      {/* Bodice */}
+      <path d="M20 28 Q25 24 30 26 Q35 24 40 28 L42 46 Q36 42 30 44 Q24 42 18 46 Z" />
+      {/* Sweetheart neckline detail */}
+      <path d="M26 19 Q30 24 34 19" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      {/* Skirt — flowing A-line */}
+      <path d="M18 46 Q24 42 30 44 Q36 42 42 46 L52 88 L8 88 Z" />
+      {/* Skirt wave layers */}
+      <path d="M12 70 Q22 66 30 68 Q38 66 48 70" stroke="rgba(255,255,255,0.14)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path d="M10 78 Q22 74 30 76 Q38 74 50 78" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* Belt / waist detail */}
+      <path d="M19 47 Q30 44 41 47" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" strokeLinecap="round" />
     </svg>
   );
 }
@@ -263,7 +308,7 @@ const DEBRIS_CFG = [
   { id: 10, type: "star", top: "10%", left: "45%", size: 14, dur: 9, delay: 2.5 },
 ];
 
-function OceanDebris({ section = "hero" }: { section?: string }) {
+function OceanDebris() {
   const [on, setOn] = useState(false);
   useEffect(() => setOn(true), []);
   if (!on) return null;
@@ -364,27 +409,24 @@ function RSVPModal({ onClose }: { onClose: () => void }) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     set(e.target.name, e.target.value);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.nombre.trim() || !form.tipo || !form.asiste) return;
     setStatus("loading");
     try {
-      const payload = {
-        nombre: form.nombre.trim(),
-        tipo: form.tipo,
-        asiste: form.asiste === "si",
-        cantidad_personas: form.tipo === "familia" && form.asiste === "si" ? Number(form.cantidad) : 1,
-        "nombres_acompañantes": form.tipo === "familia" && form.asiste === "si" ? form.acompanantes.trim() || null : null,
-        transporte: form.transporte === "si",
-      };
-      if (!isSupabaseConfigured) {
-        // Dev mode: simulate success without DB
-        await new Promise((r) => setTimeout(r, 800));
-        setStatus("success");
-        return;
-      }
-      const { error } = await supabase.from("confirmaciones").insert([payload]);
-      if (error) throw error;
+      const res = await fetch("/api/confirmaciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: form.nombre.trim(),
+          tipo: form.tipo,
+          asiste: form.asiste,
+          cantidad: form.cantidad,
+          acompanantes: form.acompanantes,
+          transporte: form.transporte,
+        }),
+      });
+      if (!res.ok) throw new Error("error");
       setStatus("success");
     } catch { setStatus("error"); }
   };
@@ -762,7 +804,7 @@ export default function InvitationClient({ mode }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { icon: <Calendar className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
-                { icon: <Clock className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Hora", value: "8:00 PM", sub: "Puntual, por favor", delay: 0.2 },
+                { icon: <Clock className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Hora", value: "5:00 PM", sub: "Puntual, por favor", delay: 0.2 },
                 { icon: <MapPin className="w-6 h-6" style={{ color: "var(--teal)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
               ].map((c) => (
                 <Reveal key={c.label} delay={c.delay}>
@@ -801,9 +843,30 @@ export default function InvitationClient({ mode }: Props) {
               <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-4">
                 Código de Vestimenta
               </h2>
-              <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
-                Te pedimos asistir de manera formal o elegante
+              <p className="text-sm font-light mb-2" style={{ color: "rgba(255,255,255,0.55)" }}>
+                Te pedimos asistir de manera formal
               </p>
+              <div className="flex items-center justify-center gap-8 mt-4">
+                <div className="flex flex-col items-center gap-2">
+                  <TuxedoIcon className="w-10 h-12 opacity-70" style={{ color: "var(--silver)" }} />
+                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    Hombres
+                  </span>
+                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
+                    Traje formal
+                  </span>
+                </div>
+                <div className="w-px h-16 opacity-15" style={{ background: "white" }} />
+                <div className="flex flex-col items-center gap-2">
+                  <LongDressIcon className="w-10 h-12 opacity-70" style={{ color: "var(--aqua-pale)" }} />
+                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    Mujeres
+                  </span>
+                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
+                    Vestido largo
+                  </span>
+                </div>
+              </div>
             </Reveal>
 
             {/* 3 color swatches */}
@@ -963,13 +1026,13 @@ export default function InvitationClient({ mode }: Props) {
             </Reveal>
             <Reveal delay={0.2}>
               <p className="text-sm font-light leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>
-                Si deseas hacerle un regalo a Maria Jose, puedes obsequiarle un sobre con un detalle especial.
+                Cada gesto de amor que traes contigo hace esta noche más especial. Si deseas honrarla con un regalo, un sobre es la forma más hermosa de hacerlo llegar.
               </p>
               <div className="rounded-2xl px-5 py-4"
                 style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)" }}>
                 <Gift className="w-5 h-5 mx-auto mb-2" style={{ color: "var(--gold-light)" }} />
                 <p className="text-xs font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
-                  Tu presencia es el mejor regalo ✦ Los sobres estarán disponibles en el salón
+                  Tu presencia ya es el regalo más grande ✦ Los sobres estarán disponibles en el salón
                 </p>
               </div>
             </Reveal>
