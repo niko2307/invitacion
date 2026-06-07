@@ -899,7 +899,7 @@ export default function InvitationClient({ mode }: Props) {
               transition={{ duration: 1.3, delay: 0.2 }}
               className="text-[11px] sm:text-sm uppercase tracking-[0.28em] font-light mb-6"
               style={{ color: "var(--aqua-pale)" }}>
-              Queremos invitarlos a la celebración de los 15 años de nuestra querida hija
+              Queremos invitarlos a la celebración de nuestra querida
             </motion.p>
 
             <motion.h1
@@ -1196,6 +1196,8 @@ export default function InvitationClient({ mode }: Props) {
         {/* ── MENSAJE ──────────────────────────────────────────────────────── */}
         <section className="relative py-24 px-4 sm:px-6 overflow-hidden"
           style={{ background: "linear-gradient(150deg, var(--ocean) 0%, var(--teal) 60%, var(--aqua) 100%)" }}>
+          {/* Subtle white overlay to lighten background */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(255,255,255,0.13)", zIndex: 0 }} />
           <Bubbles tint="rgba(180,235,244,0.3)" />
           {/* Starfish */}
           <div className="absolute top-8 right-8 opacity-20 float-alt">
