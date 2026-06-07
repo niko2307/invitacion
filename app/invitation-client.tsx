@@ -29,7 +29,7 @@ interface Props { mode: Mode }
 const EVENT = {
   name: "Maria Jose",
   date: new Date("2026-08-07T20:00:00"),
-  dateLabel: "Viernes 7 de Agosto, 2026",
+  dateLabel: "Viernes 7 de Agosto 2026",
   time: "5:30 PM",
   venue: "Chalet El Darién",
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
@@ -470,24 +470,24 @@ function FallingEnvelopes() {
 
 // ─── Ocean debris (starfish + shells + seahorses floating in hero) ───────────
 const DEBRIS_CFG = [
-  { id: 0,  type: "shell",      top: "14%", left: "6%",  size: 28, dur: 5.5, delay: 0 },
-  { id: 1,  type: "star",       top: "22%", left: "88%", size: 22, dur: 7,   delay: 1.2 },
-  { id: 2,  type: "shell",      top: "70%", left: "10%", size: 20, dur: 6,   delay: 2.1 },
-  { id: 3,  type: "star",       top: "65%", left: "80%", size: 18, dur: 8,   delay: 0.8 },
-  { id: 4,  type: "coral",      top: "82%", left: "92%", size: 32, dur: 9,   delay: 1.5 },
-  { id: 5,  type: "shell",      top: "40%", left: "96%", size: 16, dur: 5,   delay: 3 },
-  { id: 6,  type: "seaweed",    top: "55%", left: "1%",  size: 40, dur: 4,   delay: 0.5 },
-  { id: 7,  type: "seahorse",   top: "30%", left: "4%",  size: 30, dur: 6,   delay: 1.8 },
-  { id: 8,  type: "seahorse",   top: "50%", left: "93%", size: 24, dur: 7.5, delay: 0.4 },
-  { id: 9,  type: "shell",      top: "88%", left: "50%", size: 18, dur: 8,   delay: 4 },
-  { id: 10, type: "star",       top: "10%", left: "45%", size: 14, dur: 9,   delay: 2.5 },
-  { id: 11, type: "sanddollar", top: "78%", left: "3%",  size: 26, dur: 7,   delay: 1.1 },
+  { id: 0, type: "shell", top: "14%", left: "6%", size: 28, dur: 5.5, delay: 0 },
+  { id: 1, type: "star", top: "22%", left: "88%", size: 22, dur: 7, delay: 1.2 },
+  { id: 2, type: "shell", top: "70%", left: "10%", size: 20, dur: 6, delay: 2.1 },
+  { id: 3, type: "star", top: "65%", left: "80%", size: 18, dur: 8, delay: 0.8 },
+  { id: 4, type: "coral", top: "82%", left: "92%", size: 32, dur: 9, delay: 1.5 },
+  { id: 5, type: "shell", top: "40%", left: "96%", size: 16, dur: 5, delay: 3 },
+  { id: 6, type: "seaweed", top: "55%", left: "1%", size: 40, dur: 4, delay: 0.5 },
+  { id: 7, type: "seahorse", top: "30%", left: "4%", size: 30, dur: 6, delay: 1.8 },
+  { id: 8, type: "seahorse", top: "50%", left: "93%", size: 24, dur: 7.5, delay: 0.4 },
+  { id: 9, type: "shell", top: "88%", left: "50%", size: 18, dur: 8, delay: 4 },
+  { id: 10, type: "star", top: "10%", left: "45%", size: 14, dur: 9, delay: 2.5 },
+  { id: 11, type: "sanddollar", top: "78%", left: "3%", size: 26, dur: 7, delay: 1.1 },
   { id: 12, type: "sanddollar", top: "18%", left: "75%", size: 20, dur: 6.5, delay: 3.2 },
-  { id: 13, type: "jellyfish",  top: "42%", left: "90%", size: 34, dur: 8,   delay: 0.7 },
-  { id: 14, type: "jellyfish",  top: "60%", left: "2%",  size: 28, dur: 9,   delay: 2.8 },
-  { id: 15, type: "seahorse",   top: "6%",  left: "18%", size: 22, dur: 5.5, delay: 1.5 },
-  { id: 16, type: "coral",      top: "72%", left: "48%", size: 22, dur: 7,   delay: 3.5 },
-  { id: 17, type: "sanddollar", top: "35%", left: "52%", size: 15, dur: 11,  delay: 5 },
+  { id: 13, type: "jellyfish", top: "42%", left: "90%", size: 34, dur: 8, delay: 0.7 },
+  { id: 14, type: "jellyfish", top: "60%", left: "2%", size: 28, dur: 9, delay: 2.8 },
+  { id: 15, type: "seahorse", top: "6%", left: "18%", size: 22, dur: 5.5, delay: 1.5 },
+  { id: 16, type: "coral", top: "72%", left: "48%", size: 22, dur: 7, delay: 3.5 },
+  { id: 17, type: "sanddollar", top: "35%", left: "52%", size: 15, dur: 11, delay: 5 },
 ];
 
 function OceanDebris() {
@@ -899,7 +899,7 @@ export default function InvitationClient({ mode }: Props) {
               transition={{ duration: 1.3, delay: 0.2 }}
               className="text-[11px] sm:text-sm uppercase tracking-[0.28em] font-light mb-6"
               style={{ color: "var(--aqua-pale)" }}>
-              Con amor, te invitamos
+              Queremos invitarlos a la celebración de los 15 años de nuestra querida hija
             </motion.p>
 
             <motion.h1
@@ -1030,7 +1030,7 @@ export default function InvitationClient({ mode }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { icon: <Calendar className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
-                { icon: <Clock className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Hora", value: "5:30 PM", sub: "Puntual, por favor", delay: 0.2 },
+                { icon: <Clock className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Hora", value: "5:30 PM", sub: "Recomendamos puntualidad ", delay: 0.2 },
                 { icon: <MapPin className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
               ].map((c) => (
                 <Reveal key={c.label} delay={c.delay}>
@@ -1103,7 +1103,7 @@ export default function InvitationClient({ mode }: Props) {
                 Código de Vestimenta
               </h2>
               <p className="text-sm font-light mb-2" style={{ color: "rgba(255,255,255,0.7)" }}>
-                Te pedimos asistir de manera formal
+                Te pedimos asistir de manera Elegante
               </p>
               <div className="flex items-center justify-center gap-8 mt-4">
                 <div className="flex flex-col items-center gap-2">
@@ -1112,7 +1112,7 @@ export default function InvitationClient({ mode }: Props) {
                     Hombres
                   </span>
                   <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
-                    Traje formal
+                    Traje Elegante
                   </span>
                 </div>
                 <div className="w-px h-20 opacity-25" style={{ background: "white" }} />
@@ -1153,11 +1153,11 @@ export default function InvitationClient({ mode }: Props) {
                 <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(11,61,82,0.8)", boxShadow: "0 0 20px rgba(11,61,82,0.5)" }}>
                   <div className="h-24 sm:h-32 relative flex items-center justify-center"
                     style={{ background: "linear-gradient(135deg, #04121c 0%, #0b3d52 50%, #091e2c 100%)" }}>
-                    <span className="font-display italic text-lg font-light text-white opacity-80">Noche</span>
+                    <span className="font-display italic text-lg font-light text-white opacity-80">Azul </span>
                   </div>
                   <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
                     <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      Navy
+                      Oscuro
                     </p>
                   </div>
                 </div>
@@ -1285,9 +1285,9 @@ export default function InvitationClient({ mode }: Props) {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>
-                Lluvia de sobres
+                Regalos
               </p>
-              <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-5">Regalos</h2>
+              <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-5">LLuvia de sobres </h2>
             </Reveal>
             <Reveal delay={0.2}>
               <p className="text-sm font-light leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>
