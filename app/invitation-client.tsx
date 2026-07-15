@@ -21,13 +21,45 @@ import {
 } from "lucide-react";
 import Lenis from "lenis";
 
+// ─── LazyVideo ────────────────────────────────────────────────────────────────
+function LazyVideo({ className, style, poster, children }: {
+  className?: string;
+  style?: React.CSSProperties;
+  poster?: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.load();
+          el.play().catch(() => {});
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <video ref={ref} autoPlay muted loop playsInline preload="none"
+      className={className} style={style} poster={poster} aria-hidden>
+      {children}
+    </video>
+  );
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type Mode = "confirmacion" | "invitacion";
 interface Props { mode: Mode }
 
 // ─── Event Config ─────────────────────────────────────────────────────────────
 const EVENT = {
-  name: "Maria Jose",
+  name: "María José",
   date: new Date("2026-08-07T20:00:00"),
   dateLabel: "Viernes 7 de Agosto 2026",
   time: "5:30 PM",
@@ -35,7 +67,7 @@ const EVENT = {
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
   mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
   transportAddress: "Plaza Central — Av. Principal 456",
-  transportMapsUrl: "https://maps.google.com/?q=-34.6100,-58.3900",
+  transportMapsUrl: "https://maps.app.goo.gl/H816NqQkwQ7i2AJ27",
 };
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -872,10 +904,12 @@ export default function InvitationClient({ mode }: Props) {
         <section ref={heroRef}
           className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
           {/* Video background */}
-          <video autoPlay muted loop playsInline
+          <video autoPlay muted loop playsInline preload="metadata"
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ zIndex: 0 }} aria-hidden>
-            <source src="/ocean-bg.mp4" type="video/mp4" />
+            style={{ zIndex: 0 }} aria-hidden
+            poster="/ocean-bg-poster.jpg">
+            <source src="/ocean-bg-opt.webm" type="video/webm" />
+            <source src="/ocean-bg-opt.mp4" type="video/mp4" />
           </video>
           {/* Deep overlay to keep readability */}
           <div className="absolute inset-0" style={{ background: "rgba(3,14,22,0.52)", zIndex: 1 }} />
@@ -912,7 +946,7 @@ export default function InvitationClient({ mode }: Props) {
                 textShadow: "0 0 50px rgba(240,208,128,0.55), 0 0 120px rgba(240,208,128,0.2), 0 6px 30px rgba(0,0,0,0.4)",
                 letterSpacing: "-0.01em",
               }}>
-              Maria Jose
+              María José
             </motion.h1>
 
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, delay: 1.1 }}
@@ -1056,11 +1090,13 @@ export default function InvitationClient({ mode }: Props) {
         {/* ── VESTIMENTA ───────────────────────────────────────────────────── */}
         <section className="py-20 px-4 sm:px-6 relative overflow-hidden">
           {/* Video background */}
-          <video autoPlay muted loop playsInline
+          <LazyVideo
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ zIndex: 0 }} aria-hidden>
-            <source src="/vestimenta-bg.mp4" type="video/mp4" />
-          </video>
+            style={{ zIndex: 0 }}
+            poster="/vestimenta-bg-poster.jpg">
+            <source src="/vestimenta-bg-opt.webm" type="video/webm" />
+            <source src="/vestimenta-bg-opt.mp4" type="video/mp4" />
+          </LazyVideo>
           {/* Gradient overlay — dark at top/bottom, slightly lighter in center to let video breathe */}
           <div className="absolute inset-0" style={{
             background: "linear-gradient(180deg, rgba(3,12,20,0.72) 0%, rgba(4,18,28,0.55) 40%, rgba(4,18,28,0.58) 60%, rgba(3,12,20,0.75) 100%)",
@@ -1343,11 +1379,13 @@ export default function InvitationClient({ mode }: Props) {
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
         <footer className="relative py-16 px-4 sm:px-6 text-center overflow-hidden">
           {/* Same hero video for contrast */}
-          <video autoPlay muted loop playsInline
+          <LazyVideo
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ zIndex: 0 }} aria-hidden>
-            <source src="/ocean-bg.mp4" type="video/mp4" />
-          </video>
+            style={{ zIndex: 0 }}
+            poster="/ocean-bg-poster.jpg">
+            <source src="/ocean-bg-opt.webm" type="video/webm" />
+            <source src="/ocean-bg-opt.mp4" type="video/mp4" />
+          </LazyVideo>
           <div className="absolute inset-0" style={{ background: "rgba(3,12,20,0.65)", zIndex: 1 }} />
           <Bubbles tint="rgba(80,185,210,0.3)" />
           <div className="absolute bottom-0 left-4 opacity-20 float" style={{ zIndex: 2 }}>
@@ -1358,7 +1396,7 @@ export default function InvitationClient({ mode }: Props) {
           </div>
           <div className="relative z-10">
             <ShellIcon className="w-11 h-11 mx-auto mb-5 opacity-60 shimmer" style={{ color: "var(--gold-light)" }} />
-            <p className="font-display italic text-3xl sm:text-4xl text-white mb-1">Maria Jose</p>
+            <p className="font-display italic text-3xl sm:text-4xl text-white mb-1">María José</p>
             <p className="font-display text-5xl sm:text-6xl mb-4 shimmer" style={{ color: "var(--gold-light)" }}>XV</p>
             <p className="text-[11px] tracking-[0.3em] uppercase mb-8" style={{ color: "rgba(255,255,255,0.45)" }}>
               {EVENT.dateLabel}
