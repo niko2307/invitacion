@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Quinceañera Maria Jose  • 15 Años",
-  description: "Te invitamos a celebrar los 15 años de Maria Jose. Una noche mágica junto al mar.",
+  title: "Quinceañera María José • 15 Años",
+  description: "Te invitamos a celebrar los 15 años de María José. Una noche mágica junto al mar.",
   openGraph: {
-    title: "Quinceañera Maria Jose  • 15 Años",
-    description: "Te invitamos a celebrar los 15 años de Maria Jose.",
+    title: "Quinceañera María José • 15 Años",
+    description: "Te invitamos a celebrar los 15 años de María José.",
     type: "website",
   },
 };

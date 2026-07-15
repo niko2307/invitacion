@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#04121c"/>
+  <!-- Center prong -->
+  <rect x="15" y="8" width="2" height="17" rx="1" fill="#c9a84c"/>
+  <!-- Left prong -->
+  <rect x="10" y="8" width="2" height="9" rx="1" fill="#c9a84c"/>
+  <!-- Right prong -->
+  <rect x="20" y="8" width="2" height="9" rx="1" fill="#c9a84c"/>
+  <!-- Left prong top spike -->
+  <polygon points="11,8 10,4 12,4" fill="#c9a84c"/>
+  <!-- Center prong top spike -->
+  <polygon points="16,8 15,3 17,3" fill="#c9a84c"/>
+  <!-- Right prong top spike -->
+  <polygon points="21,8 20,4 22,4" fill="#c9a84c"/>
+  <!-- Crossbar -->
+  <rect x="10" y="15" width="12" height="2" rx="1" fill="#c9a84c"/>
+  <!-- Handle base oval -->
+  <ellipse cx="16" cy="26" rx="3" ry="1.2" fill="#c9a84c"/>
+</svg>
