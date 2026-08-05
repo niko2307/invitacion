@@ -66,7 +66,7 @@ const EVENT = {
   venue: "Chalet El Darién",
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
   mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
-  transportAddress: "Colegio Enrique Olaya Herrera",
+  transportAddress: "Cra. 10d #32A-55, Bogotá",
   transportMapsUrl: "https://maps.app.goo.gl/H816NqQkwQ7i2AJ27",
 };
 
@@ -883,7 +883,7 @@ function RSVPModal({ onClose }: { onClose: () => void }) {
 }
 
 // ─── Date + Time Card ─────────────────────────────────────────────────────────
-function DateTimeCard() {
+function DateTimeCard({ time, cardDelay = 0, venue }: { time: string; cardDelay?: number; venue?: { label?: string; name: string; address: string; mapsUrl: string } }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const [dayCount, setDayCount] = useState(0);
@@ -900,65 +900,57 @@ function DateTimeCard() {
       setDayCount(Math.round(eased * 7));
       if (t < 1) frame = requestAnimationFrame(tick);
     };
-    const timeout = setTimeout(() => { frame = requestAnimationFrame(tick); }, 500);
+    const timeout = setTimeout(() => { frame = requestAnimationFrame(tick); }, 500 + cardDelay * 1000);
     return () => { clearTimeout(timeout); cancelAnimationFrame(frame); };
-  }, [inView]);
+  }, [inView, cardDelay]);
 
-  const timeChars = ["3", ":", "4", "5"];
+  const timeChars = time.split("");
 
   return (
-    <div ref={ref} style={{ position: "relative", maxWidth: 320, margin: "0 auto", width: "100%" }}>
+    <div ref={ref} style={{ position: "relative", width: "100%" }}>
 
       {/* Ambient glow pulse */}
       <motion.div
-        animate={{ opacity: [0.25, 0.65, 0.25], scale: [1, 1.1, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ opacity: [0.2, 0.55, 0.2], scale: [1, 1.1, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: cardDelay }}
         style={{
-          position: "absolute", inset: -48, borderRadius: 48, pointerEvents: "none",
-          background: "radial-gradient(ellipse, rgba(58,164,184,0.18) 0%, transparent 70%)",
-        }}
-      />
-      <motion.div
-        animate={{ opacity: [0.15, 0.4, 0.15], scale: [1, 1.18, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        style={{
-          position: "absolute", inset: -64, borderRadius: 64, pointerEvents: "none",
-          background: "radial-gradient(ellipse, rgba(240,208,128,0.08) 0%, transparent 65%)",
+          position: "absolute", inset: -32, borderRadius: 32, pointerEvents: "none",
+          background: "radial-gradient(ellipse, rgba(58,164,184,0.15) 0%, transparent 70%)",
         }}
       />
 
       {/* Card */}
       <motion.div
-        initial={{ opacity: 0, y: 48, scale: 0.9 }}
+        initial={{ opacity: 0, y: 36, scale: 0.92 }}
         animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.85, delay: cardDelay, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          borderRadius: 20,
+          borderRadius: 16,
           background: "linear-gradient(160deg, rgba(17,61,85,0.88) 0%, rgba(4,14,24,0.97) 100%)",
           border: "1px solid rgba(58,164,184,0.24)",
-          boxShadow: "0 12px 60px rgba(0,0,0,0.6), 0 0 80px rgba(58,164,184,0.12), inset 0 1px 0 rgba(255,255,255,0.07)",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.55), 0 0 60px rgba(58,164,184,0.1), inset 0 1px 0 rgba(255,255,255,0.06)",
           backdropFilter: "blur(16px)",
           overflow: "hidden",
         }}>
 
         {/* Header strip */}
         <motion.div
-          initial={{ opacity: 0, y: -24 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
+          transition={{ duration: 0.55, delay: cardDelay + 0.2, ease: EASE }}
           style={{
             background: "linear-gradient(90deg, rgba(58,164,184,0.22) 0%, rgba(58,164,184,0.1) 100%)",
             borderBottom: "1px solid rgba(58,164,184,0.18)",
-            padding: "11px 24px",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+            padding: "9px 16px",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
           }}>
           <motion.div
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(58,164,184,0.8)" }}
+            style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(58,164,184,0.8)" }}
           />
           <span style={{
-            fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
+            fontSize: 10, letterSpacing: "0.26em", textTransform: "uppercase",
             color: "rgba(58,164,184,0.92)", fontWeight: 500,
           }}>
             Agosto 2026
@@ -966,32 +958,32 @@ function DateTimeCard() {
           <motion.div
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.25 }}
-            style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(58,164,184,0.8)" }}
+            style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(58,164,184,0.8)" }}
           />
         </motion.div>
 
         {/* Day number — counter + blur reveal */}
-        <div style={{ textAlign: "center", padding: "28px 24px 10px" }}>
+        <div style={{ textAlign: "center", padding: "20px 16px 8px" }}>
           <motion.div
-            initial={{ opacity: 0, scale: 0.4, filter: "blur(24px)" }}
+            initial={{ opacity: 0, scale: 0.4, filter: "blur(20px)" }}
             animate={inView ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
-            transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1, delay: cardDelay + 0.4, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              fontSize: "clamp(5.5rem, 24vw, 7.5rem)", lineHeight: 1,
+              fontSize: "clamp(4rem, 18vw, 5.5rem)", lineHeight: 1,
               fontFamily: "Georgia, serif", fontStyle: "italic", fontWeight: 400,
               color: "rgba(255,255,255,0.96)", letterSpacing: "-0.04em",
-              textShadow: "0 0 80px rgba(58,164,184,0.4), 0 4px 24px rgba(0,0,0,0.6)",
+              textShadow: "0 0 60px rgba(58,164,184,0.4), 0 4px 20px rgba(0,0,0,0.6)",
             }}>
             {dayCount}
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, letterSpacing: "0.5em" }}
-            animate={inView ? { opacity: 1, letterSpacing: "0.26em" } : {}}
-            transition={{ duration: 0.8, delay: 0.85, ease: EASE }}
+            initial={{ opacity: 0, letterSpacing: "0.45em" }}
+            animate={inView ? { opacity: 1, letterSpacing: "0.22em" } : {}}
+            transition={{ duration: 0.8, delay: cardDelay + 0.8, ease: EASE }}
             style={{
-              fontSize: 11, textTransform: "uppercase",
-              color: "rgba(255,255,255,0.35)", marginTop: 6,
+              fontSize: 10, textTransform: "uppercase",
+              color: "rgba(255,255,255,0.35)", marginTop: 4,
             }}>
             Viernes
           </motion.div>
@@ -1001,40 +993,40 @@ function DateTimeCard() {
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
           animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.7, delay: 1.0, ease: EASE }}
+          transition={{ duration: 0.6, delay: cardDelay + 0.95, ease: EASE }}
           style={{
-            margin: "0 24px", height: 1, transformOrigin: "center",
+            margin: "0 16px", height: 1, transformOrigin: "center",
             background: "linear-gradient(90deg, transparent, rgba(58,164,184,0.4), transparent)",
           }}
         />
 
         {/* Time — chars staggered */}
-        <div style={{ textAlign: "center", padding: "20px 24px 28px" }}>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 4, overflow: "hidden" }}>
+        <div style={{ textAlign: "center", padding: "14px 16px 20px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 2, overflow: "hidden" }}>
             {timeChars.map((char, i) => (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 32 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.55, delay: 1.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, delay: cardDelay + 1.1 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  fontSize: "clamp(2.8rem, 12vw, 4.2rem)", lineHeight: 1,
+                  fontSize: "clamp(2rem, 9vw, 3rem)", lineHeight: 1,
                   fontFamily: "Georgia, serif", fontStyle: "italic",
                   color: "rgba(240,208,128,0.95)", letterSpacing: char === ":" ? "0" : "-0.02em",
-                  textShadow: "0 0 48px rgba(240,208,128,0.5), 0 2px 16px rgba(0,0,0,0.5)",
+                  textShadow: "0 0 36px rgba(240,208,128,0.5), 0 2px 12px rgba(0,0,0,0.5)",
                   display: "inline-block",
                 }}>
                 {char}
               </motion.span>
             ))}
             <motion.span
-              initial={{ opacity: 0, x: 12 }}
+              initial={{ opacity: 0, x: 10 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: 1.6, ease: EASE }}
+              transition={{ duration: 0.45, delay: cardDelay + 1.5, ease: EASE }}
               style={{
-                fontSize: "1rem", letterSpacing: "0.14em",
+                fontSize: "0.75rem", letterSpacing: "0.12em",
                 color: "rgba(58,164,184,0.9)", fontWeight: 600,
-                paddingBottom: 6, marginLeft: 6,
+                paddingBottom: 4, marginLeft: 5,
               }}>
               PM
             </motion.span>
@@ -1043,13 +1035,52 @@ function DateTimeCard() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.8, delay: 1.8, ease: EASE }}
+            transition={{ duration: 0.7, delay: cardDelay + 1.7, ease: EASE }}
             style={{
-              fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.28)", marginTop: 10,
+              fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.28)", marginTop: 8,
             }}>
             Hora de citación
           </motion.div>
+
+          {/* Venue info — solo si se pasa el prop */}
+          {venue && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: cardDelay + 1.9, ease: EASE }}
+              style={{
+                marginTop: 14,
+                borderTop: "1px solid rgba(58,164,184,0.14)",
+                paddingTop: 12,
+              }}>
+              <p style={{
+                fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase",
+                color: "rgba(58,164,184,0.6)", marginBottom: 6, textAlign: "center",
+              }}>
+                {venue.label ?? "Lugar del evento"}
+              </p>
+              <p style={{
+                fontSize: 11, fontFamily: "Georgia, serif", fontStyle: "italic",
+                color: "rgba(255,255,255,0.85)", textAlign: "center", lineHeight: 1.4,
+                marginBottom: 6,
+              }}>
+                {venue.name}
+              </p>
+              <a
+                href={venue.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
+                  fontSize: 9, letterSpacing: "0.1em", color: "rgba(58,164,184,0.75)",
+                  textDecoration: "none",
+                }}>
+                <MapPin style={{ width: 9, height: 9 }} />
+                {venue.address}
+              </a>
+            </motion.div>
+          )}
         </div>
       </motion.div>
     </div>
@@ -1550,9 +1581,51 @@ export default function InvitationClient({ mode }: Props) {
                     style={{ background: "linear-gradient(90deg, transparent, rgba(58,164,184,0.6), transparent)" }} />
                 </Reveal>
 
-                {/* ── CLOCK ── */}
+                {/* ── DOS CALENDARIOS ── */}
                 <Reveal delay={0.12}>
-                  <DateTimeCard />
+                  <div className="grid grid-cols-2 gap-4">
+
+                    {/* Con transporte */}
+                    <div className="flex flex-col gap-3">
+                      <motion.div
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.18, ease: EASE }}
+                        className="flex flex-col items-center gap-1.5 text-center">
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+                          style={{ background: "rgba(58,164,184,0.15)" }}>
+                          <Bus className="w-3.5 h-3.5" style={{ color: "var(--aqua)" }} />
+                        </div>
+                        <p style={{ fontSize: 10, letterSpacing: "0.04em", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
+                          Si usas el<br />
+                          <span style={{ color: "rgba(58,164,184,0.85)", fontWeight: 600 }}>servicio de transporte</span>
+                        </p>
+                      </motion.div>
+                      <DateTimeCard time="3:45" cardDelay={0.22} venue={{ label: "Punto de encuentro", name: "Salida del transporte", address: EVENT.transportAddress, mapsUrl: EVENT.transportMapsUrl }} />
+                    </div>
+
+                    {/* Sin transporte */}
+                    <div className="flex flex-col gap-3">
+                      <motion.div
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.32, ease: EASE }}
+                        className="flex flex-col items-center gap-1.5 text-center">
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+                          style={{ background: "rgba(240,208,128,0.12)" }}>
+                          <MapPin className="w-3.5 h-3.5" style={{ color: "rgba(240,208,128,0.8)" }} />
+                        </div>
+                        <p style={{ fontSize: 10, letterSpacing: "0.04em", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
+                          Si llegas<br />
+                          <span style={{ color: "rgba(240,208,128,0.75)", fontWeight: 600 }}>por tu cuenta</span>
+                        </p>
+                      </motion.div>
+                      <DateTimeCard time="5:30" cardDelay={0.38} venue={{ name: EVENT.venue, address: EVENT.address, mapsUrl: EVENT.mapsUrl }} />
+                    </div>
+
+                  </div>
                 </Reveal>
 
                 <Reveal delay={0.15}>
