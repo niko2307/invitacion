@@ -66,7 +66,7 @@ const EVENT = {
   venue: "Chalet El Darién",
   address: "Cra. 9 #12-47, Cota, Cundinamarca",
   mapsUrl: "https://maps.google.com/?q=RV7W%2B85+Cota,+Cundinamarca",
-  transportAddress: "Plaza Central — Av. Principal 456",
+  transportAddress: "Colegio Enrique Olaya Herrera",
   transportMapsUrl: "https://maps.app.goo.gl/H816NqQkwQ7i2AJ27",
 };
 
@@ -82,6 +82,7 @@ function useSmoothScroll() {
     return () => { lenis.destroy(); cancelAnimationFrame(raf); };
   }, []);
 }
+
 
 function useCountdown(target: Date) {
   const calc = useCallback(() => {
@@ -384,9 +385,9 @@ function SwimmingFish() {
 
 
 // ─── Underwater scene (seabed silhouette) ─────────────────────────────────────
-function UnderwaterScene({ className }: { className?: string }) {
+function UnderwaterScene({ className, style }: { className?: string; style?: CSSProperties }) {
   return (
-    <svg viewBox="0 0 800 120" className={className} fill="none" aria-hidden preserveAspectRatio="xMidYMid slice">
+    <svg viewBox="0 0 800 120" className={className} style={style} fill="none" aria-hidden preserveAspectRatio="xMidYMid slice">
       {/* Light rays */}
       <path d="M180,0 L150,80" stroke="rgba(100,210,230,0.07)" strokeWidth="36" />
       <path d="M350,0 L370,100" stroke="rgba(100,210,230,0.05)" strokeWidth="28" />
@@ -881,6 +882,180 @@ function RSVPModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ─── Date + Time Card ─────────────────────────────────────────────────────────
+function DateTimeCard() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [dayCount, setDayCount] = useState(0);
+
+  // Counter animation: 1 → 7
+  useEffect(() => {
+    if (!inView) return;
+    let frame: number;
+    const startTime = performance.now();
+    const duration = 1000;
+    const tick = (now: number) => {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDayCount(Math.round(eased * 7));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    const timeout = setTimeout(() => { frame = requestAnimationFrame(tick); }, 500);
+    return () => { clearTimeout(timeout); cancelAnimationFrame(frame); };
+  }, [inView]);
+
+  const timeChars = ["3", ":", "4", "5"];
+
+  return (
+    <div ref={ref} style={{ position: "relative", maxWidth: 320, margin: "0 auto", width: "100%" }}>
+
+      {/* Ambient glow pulse */}
+      <motion.div
+        animate={{ opacity: [0.25, 0.65, 0.25], scale: [1, 1.1, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute", inset: -48, borderRadius: 48, pointerEvents: "none",
+          background: "radial-gradient(ellipse, rgba(58,164,184,0.18) 0%, transparent 70%)",
+        }}
+      />
+      <motion.div
+        animate={{ opacity: [0.15, 0.4, 0.15], scale: [1, 1.18, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        style={{
+          position: "absolute", inset: -64, borderRadius: 64, pointerEvents: "none",
+          background: "radial-gradient(ellipse, rgba(240,208,128,0.08) 0%, transparent 65%)",
+        }}
+      />
+
+      {/* Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 48, scale: 0.9 }}
+        animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          borderRadius: 20,
+          background: "linear-gradient(160deg, rgba(17,61,85,0.88) 0%, rgba(4,14,24,0.97) 100%)",
+          border: "1px solid rgba(58,164,184,0.24)",
+          boxShadow: "0 12px 60px rgba(0,0,0,0.6), 0 0 80px rgba(58,164,184,0.12), inset 0 1px 0 rgba(255,255,255,0.07)",
+          backdropFilter: "blur(16px)",
+          overflow: "hidden",
+        }}>
+
+        {/* Header strip */}
+        <motion.div
+          initial={{ opacity: 0, y: -24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
+          style={{
+            background: "linear-gradient(90deg, rgba(58,164,184,0.22) 0%, rgba(58,164,184,0.1) 100%)",
+            borderBottom: "1px solid rgba(58,164,184,0.18)",
+            padding: "11px 24px",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+          }}>
+          <motion.div
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(58,164,184,0.8)" }}
+          />
+          <span style={{
+            fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
+            color: "rgba(58,164,184,0.92)", fontWeight: 500,
+          }}>
+            Agosto 2026
+          </span>
+          <motion.div
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.25 }}
+            style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(58,164,184,0.8)" }}
+          />
+        </motion.div>
+
+        {/* Day number — counter + blur reveal */}
+        <div style={{ textAlign: "center", padding: "28px 24px 10px" }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.4, filter: "blur(24px)" }}
+            animate={inView ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
+            transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              fontSize: "clamp(5.5rem, 24vw, 7.5rem)", lineHeight: 1,
+              fontFamily: "Georgia, serif", fontStyle: "italic", fontWeight: 400,
+              color: "rgba(255,255,255,0.96)", letterSpacing: "-0.04em",
+              textShadow: "0 0 80px rgba(58,164,184,0.4), 0 4px 24px rgba(0,0,0,0.6)",
+            }}>
+            {dayCount}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, letterSpacing: "0.5em" }}
+            animate={inView ? { opacity: 1, letterSpacing: "0.26em" } : {}}
+            transition={{ duration: 0.8, delay: 0.85, ease: EASE }}
+            style={{
+              fontSize: 11, textTransform: "uppercase",
+              color: "rgba(255,255,255,0.35)", marginTop: 6,
+            }}>
+            Viernes
+          </motion.div>
+        </div>
+
+        {/* Divider expanding from center */}
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+          transition={{ duration: 0.7, delay: 1.0, ease: EASE }}
+          style={{
+            margin: "0 24px", height: 1, transformOrigin: "center",
+            background: "linear-gradient(90deg, transparent, rgba(58,164,184,0.4), transparent)",
+          }}
+        />
+
+        {/* Time — chars staggered */}
+        <div style={{ textAlign: "center", padding: "20px 24px 28px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 4, overflow: "hidden" }}>
+            {timeChars.map((char, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 1.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  fontSize: "clamp(2.8rem, 12vw, 4.2rem)", lineHeight: 1,
+                  fontFamily: "Georgia, serif", fontStyle: "italic",
+                  color: "rgba(240,208,128,0.95)", letterSpacing: char === ":" ? "0" : "-0.02em",
+                  textShadow: "0 0 48px rgba(240,208,128,0.5), 0 2px 16px rgba(0,0,0,0.5)",
+                  display: "inline-block",
+                }}>
+                {char}
+              </motion.span>
+            ))}
+            <motion.span
+              initial={{ opacity: 0, x: 12 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, delay: 1.6, ease: EASE }}
+              style={{
+                fontSize: "1rem", letterSpacing: "0.14em",
+                color: "rgba(58,164,184,0.9)", fontWeight: 600,
+                paddingBottom: 6, marginLeft: 6,
+              }}>
+              PM
+            </motion.span>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.8, delay: 1.8, ease: EASE }}
+            style={{
+              fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.28)", marginTop: 10,
+            }}>
+            Hora de citación
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function InvitationClient({ mode }: Props) {
   useSmoothScroll();
@@ -1036,345 +1211,435 @@ export default function InvitationClient({ mode }: Props) {
           </Reveal>
         </section>
 
-        <WaveDivider from="var(--pearl)" to="var(--deep)" />
+        {mode === "invitacion" ? (
+          <>
+            <WaveDivider from="var(--pearl)" to="var(--deep)" />
 
-        {/* ── DETALLES ─────────────────────────────────────────────────────── */}
-        <section id="detalles" className="relative py-20 px-4 sm:px-6 overflow-hidden"
-          style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 40%, var(--teal) 75%, var(--aqua) 100%)" }}>
-          <Bubbles tint="rgba(80,185,210,0.4)" />
-          <div className="absolute top-6 right-2 opacity-[0.14] float-alt" aria-hidden>
-            <SeahorseIcon className="w-12 h-20" style={{ color: "var(--aqua-pale)" }} />
-          </div>
-          <div className="absolute bottom-6 left-2 opacity-[0.14] float" aria-hidden>
-            <StarfishIcon className="w-12 h-12" style={{ color: "var(--gold-light)" }} />
-          </div>
-          <div className="absolute top-8 left-1/3 opacity-[0.1] float" aria-hidden>
-            <SandDollarIcon className="w-10 h-10" style={{ color: "var(--aqua-pale)" }} />
-          </div>
-          <div className="absolute bottom-8 right-1/4 opacity-[0.1] float-alt" aria-hidden>
-            <JellyfishIcon className="w-9 h-12" style={{ color: "var(--silver)" }} />
-          </div>
-          <div className="relative max-w-2xl mx-auto z-10">
-            <Reveal className="text-center mb-6">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>La velada</p>
-              <h2 className="font-display italic text-4xl sm:text-5xl text-white">
-                Una noche mágica
-              </h2>
-            </Reveal>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                { icon: <Calendar className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
-                { icon: <Clock className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Hora", value: "5:30 PM", sub: "Recomendamos puntualidad ", delay: 0.2 },
-                { icon: <MapPin className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
-              ].map((c) => (
-                <Reveal key={c.label} delay={c.delay}>
-                  <motion.div whileHover={{ y: -6, boxShadow: "0 24px 48px rgba(0,0,0,0.35)" }}
-                    transition={{ duration: 0.3 }} className="rounded-3xl p-7 text-center cursor-default"
-                    style={{ background: "rgba(4,20,30,0.55)", backdropFilter: "blur(18px)", border: "1px solid rgba(58,164,184,0.25)" }}>
-                    <div className="w-12 h-12 rounded-2xl mx-auto mb-4 flex items-center justify-center"
-                      style={{ background: "rgba(58,164,184,0.2)" }}>
-                      {c.icon}
+            {/* ── DETALLES ─────────────────────────────────────────────────────── */}
+            <section id="detalles" className="relative py-20 px-4 sm:px-6 overflow-hidden"
+              style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 40%, var(--teal) 75%, var(--aqua) 100%)" }}>
+              <Bubbles tint="rgba(80,185,210,0.4)" />
+              <div className="absolute top-6 right-2 opacity-[0.14] float-alt" aria-hidden>
+                <SeahorseIcon className="w-12 h-20" style={{ color: "var(--aqua-pale)" }} />
+              </div>
+              <div className="absolute bottom-6 left-2 opacity-[0.14] float" aria-hidden>
+                <StarfishIcon className="w-12 h-12" style={{ color: "var(--gold-light)" }} />
+              </div>
+              <div className="absolute top-8 left-1/3 opacity-[0.1] float" aria-hidden>
+                <SandDollarIcon className="w-10 h-10" style={{ color: "var(--aqua-pale)" }} />
+              </div>
+              <div className="absolute bottom-8 right-1/4 opacity-[0.1] float-alt" aria-hidden>
+                <JellyfishIcon className="w-9 h-12" style={{ color: "var(--silver)" }} />
+              </div>
+              <div className="relative max-w-2xl mx-auto z-10">
+                <Reveal className="text-center mb-6">
+                  <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>La velada</p>
+                  <h2 className="font-display italic text-4xl sm:text-5xl text-white">
+                    Una noche mágica
+                  </h2>
+                </Reveal>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {[
+                    { icon: <Calendar className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Fecha", value: "Viernes", sub: "7 · Agosto · 2026", delay: 0.1 },
+                    { icon: <Clock className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Hora", value: "5:30 PM", sub: "Recomendamos puntualidad ", delay: 0.2 },
+                    { icon: <MapPin className="w-6 h-6" style={{ color: "var(--aqua)" }} />, label: "Lugar", value: EVENT.venue, sub: EVENT.address, delay: 0.3 },
+                  ].map((c) => (
+                    <Reveal key={c.label} delay={c.delay}>
+                      <motion.div whileHover={{ y: -6, boxShadow: "0 24px 48px rgba(0,0,0,0.35)" }}
+                        transition={{ duration: 0.3 }} className="rounded-3xl p-7 text-center cursor-default"
+                        style={{ background: "rgba(4,20,30,0.55)", backdropFilter: "blur(18px)", border: "1px solid rgba(58,164,184,0.25)" }}>
+                        <div className="w-12 h-12 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                          style={{ background: "rgba(58,164,184,0.2)" }}>
+                          {c.icon}
+                        </div>
+                        <p className="text-[10px] tracking-[0.22em] uppercase mb-1" style={{ color: "var(--aqua-pale)" }}>{c.label}</p>
+                        <p className="font-display text-xl font-medium mb-1 text-white">{c.value}</p>
+                        <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>{c.sub}</p>
+                      </motion.div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <WaveDivider from="var(--aqua)" to="var(--deep)" double />
+
+            {/* ── VESTIMENTA ───────────────────────────────────────────────────── */}
+            <section className="py-20 px-4 sm:px-6 relative overflow-hidden">
+              <LazyVideo
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ zIndex: 0 }}
+                poster="/vestimenta-bg-poster.jpg">
+                <source src="/vestimenta-bg-opt.webm" type="video/webm" />
+                <source src="/vestimenta-bg-opt.mp4" type="video/mp4" />
+              </LazyVideo>
+              <div className="absolute inset-0" style={{
+                background: "linear-gradient(180deg, rgba(3,12,20,0.72) 0%, rgba(4,18,28,0.55) 40%, rgba(4,18,28,0.58) 60%, rgba(3,12,20,0.75) 100%)",
+                zIndex: 1,
+              }} />
+              <Bubbles tint="rgba(80,160,190,0.25)" />
+              <SwimmingFish />
+              <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: 2 }} aria-hidden>
+                <UnderwaterScene className="w-full h-24 sm:h-32" />
+              </div>
+              <div className="absolute top-10 left-6 opacity-[0.18] float" style={{ zIndex: 2 }} aria-hidden>
+                <SandDollarIcon className="w-20 h-20" style={{ color: "var(--silver)" }} />
+              </div>
+              <div className="absolute top-16 right-8 opacity-[0.15] float-alt" style={{ zIndex: 2 }} aria-hidden>
+                <SandDollarIcon className="w-16 h-16" style={{ color: "var(--aqua-pale)" }} />
+              </div>
+              <div className="absolute bottom-8 left-3 opacity-30 float-alt" style={{ zIndex: 2 }}>
+                <CoralIcon className="w-14 h-20" style={{ color: "var(--aqua)" }} />
+              </div>
+              <div className="absolute bottom-8 right-3 opacity-25 float" style={{ transform: "scaleX(-1)", zIndex: 2 }}>
+                <CoralIcon className="w-12 h-16" style={{ color: "var(--silver)" }} />
+              </div>
+              <div className="absolute top-1/3 left-1 opacity-[0.2] float" style={{ zIndex: 2 }} aria-hidden>
+                <SeahorseIcon className="w-10 h-16" style={{ color: "var(--aqua-pale)" }} />
+              </div>
+              <div className="absolute top-1/3 right-1 opacity-[0.18] float-alt" style={{ zIndex: 2 }} aria-hidden>
+                <SeahorseIcon className="w-10 h-16" style={{ color: "var(--silver)" }} />
+              </div>
+              <div className="relative z-10 max-w-lg mx-auto">
+                <Reveal className="text-center mb-12">
+                  <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>Dress Code</p>
+                  <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-4"
+                    style={{ textShadow: "0 2px 24px rgba(0,0,0,0.5)" }}>
+                    Código de Vestimenta
+                  </h2>
+                  <p className="text-sm font-light mb-2" style={{ color: "rgba(255,255,255,0.7)" }}>
+                    Te pedimos asistir de manera Elegante
+                  </p>
+                  <div className="flex items-center justify-center gap-8 mt-4">
+                    <div className="flex flex-col items-center gap-2">
+                      <TuxedoIcon className="w-14 h-16" style={{ color: "var(--silver)", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }} />
+                      <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
+                        Hombres
+                      </span>
+                      <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
+                        Traje Elegante
+                      </span>
                     </div>
-                    <p className="text-[10px] tracking-[0.22em] uppercase mb-1" style={{ color: "var(--aqua-pale)" }}>{c.label}</p>
-                    <p className="font-display text-xl font-medium mb-1 text-white">{c.value}</p>
-                    <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>{c.sub}</p>
+                    <div className="w-px h-20 opacity-25" style={{ background: "white" }} />
+                    <div className="flex flex-col items-center gap-2">
+                      <LongDressIcon className="w-12 h-16" style={{ color: "var(--aqua-pale)", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }} />
+                      <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
+                        Mujeres
+                      </span>
+                      <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
+                        Vestido largo
+                      </span>
+                    </div>
+                  </div>
+                </Reveal>
+                <div className="grid grid-cols-3 gap-3 mb-8">
+                  <Reveal delay={0.1}>
+                    <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(196,216,224,0.4)", boxShadow: "0 0 20px rgba(196,216,224,0.15)" }}>
+                      <div className="h-24 sm:h-32 relative flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #8aaab8 0%, #c4d8e0 35%, #eef4f7 50%, #c4d8e0 70%, #8aaab8 100%)" }}>
+                        <div className="absolute inset-0 opacity-50"
+                          style={{ background: "linear-gradient(45deg,transparent 40%,rgba(255,255,255,0.5) 50%,transparent 60%)", backgroundSize: "200% 200%", animation: "silverShine 3s linear infinite" }} />
+                        <span className="font-display italic text-lg font-light relative z-10"
+                          style={{ color: "rgba(35,60,75,0.75)" }}>Plata</span>
+                      </div>
+                      <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
+                        <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>Silver</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                  <Reveal delay={0.2}>
+                    <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(11,61,82,0.8)", boxShadow: "0 0 20px rgba(11,61,82,0.5)" }}>
+                      <div className="h-24 sm:h-32 relative flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #04121c 0%, #0b3d52 50%, #091e2c 100%)" }}>
+                        <span className="font-display italic text-lg font-light text-white opacity-80">Azul </span>
+                      </div>
+                      <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
+                        <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>Oscuro</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                  <Reveal delay={0.3}>
+                    <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(135,206,219,0.5)", boxShadow: "0 0 20px rgba(135,206,219,0.18)" }}>
+                      <div className="h-24 sm:h-32 relative flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #c8eaf5 0%, #87cedb 45%, #b8e4f0 100%)" }}>
+                        <span className="font-display italic text-lg font-light"
+                          style={{ color: "rgba(20,80,100,0.75)" }}>Cielo</span>
+                      </div>
+                      <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
+                        <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>Celeste</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                </div>
+                <Reveal delay={0.4}>
+                  <div className="rounded-2xl px-5 py-4 text-center"
+                    style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}>
+                    <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.6)" }}>
+                      ✦ Estos colores están reservados para la festejada y su familia ✦
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+            </section>
+
+            <WaveDivider from="var(--deep)" to="var(--ocean)" double />
+
+            {/* ── MENSAJE ──────────────────────────────────────────────────────── */}
+            <section className="relative py-24 px-4 sm:px-6 overflow-hidden"
+              style={{ background: "linear-gradient(150deg, var(--ocean) 0%, var(--teal) 60%, var(--aqua) 100%)" }}>
+              <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(255,255,255,0.13)", zIndex: 0 }} />
+              <Bubbles tint="rgba(180,235,244,0.3)" />
+              <div className="absolute top-8 right-8 opacity-20 float-alt">
+                <StarfishIcon className="w-12 h-12" style={{ color: "var(--gold-light)" }} />
+              </div>
+              <div className="absolute bottom-12 left-6 opacity-15 float">
+                <StarfishIcon className="w-8 h-8" style={{ color: "white" }} />
+              </div>
+              <div className="absolute top-6 left-4 opacity-15 float-alt" aria-hidden>
+                <JellyfishIcon className="w-10 h-14" style={{ color: "var(--gold-light)" }} />
+              </div>
+              <div className="absolute bottom-6 right-6 opacity-12 float" aria-hidden>
+                <SandDollarIcon className="w-12 h-12" style={{ color: "rgba(255,255,255,0.8)" }} />
+              </div>
+              <div className="relative z-10 max-w-xl mx-auto text-center">
+                <Reveal>
+                  <TridentIcon className="w-12 h-16 mx-auto mb-8 shimmer" style={{ color: "var(--gold-light)" }} />
+                </Reveal>
+                <Reveal delay={0.15}>
+                  <blockquote className="font-display italic leading-relaxed text-white mb-8"
+                    style={{ fontSize: "clamp(1.4rem,5vw,2rem)", textShadow: "0 2px 20px rgba(0,0,0,0.2)" }}>
+                    &ldquo;La vida es como el mar: llena de maravillas para quienes se atreven a explorarla.&rdquo;
+                  </blockquote>
+                </Reveal>
+                <Reveal delay={0.25}>
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="h-px w-10 shimmer" style={{ background: "var(--gold-light)" }} />
+                    <p className="text-xs tracking-[0.25em] uppercase" style={{ color: "rgba(255,255,255,0.6)" }}>
+                      Con amor, tu familia
+                    </p>
+                    <div className="h-px w-10 shimmer" style={{ background: "var(--gold-light)" }} />
+                  </div>
+                </Reveal>
+              </div>
+            </section>
+
+            <WaveDivider from="var(--aqua)" to="var(--deep)" double />
+
+            {/* ── REGALOS ───────────────────────────────────────────────────────── */}
+            <section className="relative py-24 px-4 sm:px-6 overflow-hidden"
+              style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 60%, var(--teal) 100%)" }}>
+              <FallingEnvelopes />
+              <div className="relative z-10 max-w-sm mx-auto text-center">
+                <Reveal>
+                  <motion.div
+                    animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                    className="mx-auto mb-8" style={{ width: "clamp(90px,28vw,130px)" }}>
+                    <EnvelopeLogoIcon className="w-full h-auto drop-shadow-xl" />
                   </motion.div>
                 </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <WaveDivider from="var(--aqua)" to="var(--deep)" double />
-
-        {/* ── VESTIMENTA ───────────────────────────────────────────────────── */}
-        <section className="py-20 px-4 sm:px-6 relative overflow-hidden">
-          {/* Video background */}
-          <LazyVideo
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ zIndex: 0 }}
-            poster="/vestimenta-bg-poster.jpg">
-            <source src="/vestimenta-bg-opt.webm" type="video/webm" />
-            <source src="/vestimenta-bg-opt.mp4" type="video/mp4" />
-          </LazyVideo>
-          {/* Gradient overlay — dark at top/bottom, slightly lighter in center to let video breathe */}
-          <div className="absolute inset-0" style={{
-            background: "linear-gradient(180deg, rgba(3,12,20,0.72) 0%, rgba(4,18,28,0.55) 40%, rgba(4,18,28,0.58) 60%, rgba(3,12,20,0.75) 100%)",
-            zIndex: 1,
-          }} />
-
-          <Bubbles tint="rgba(80,160,190,0.25)" />
-          <SwimmingFish />
-
-          {/* Seabed at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: 2 }} aria-hidden>
-            <UnderwaterScene className="w-full h-24 sm:h-32" />
-          </div>
-
-          {/* Decorative elements */}
-          <div className="absolute top-10 left-6 opacity-[0.18] float" style={{ zIndex: 2 }} aria-hidden>
-            <SandDollarIcon className="w-20 h-20" style={{ color: "var(--silver)" }} />
-          </div>
-          <div className="absolute top-16 right-8 opacity-[0.15] float-alt" style={{ zIndex: 2 }} aria-hidden>
-            <SandDollarIcon className="w-16 h-16" style={{ color: "var(--aqua-pale)" }} />
-          </div>
-          <div className="absolute bottom-8 left-3 opacity-30 float-alt" style={{ zIndex: 2 }}>
-            <CoralIcon className="w-14 h-20" style={{ color: "var(--aqua)" }} />
-          </div>
-          <div className="absolute bottom-8 right-3 opacity-25 float" style={{ transform: "scaleX(-1)", zIndex: 2 }}>
-            <CoralIcon className="w-12 h-16" style={{ color: "var(--silver)" }} />
-          </div>
-          <div className="absolute top-1/3 left-1 opacity-[0.2] float" style={{ zIndex: 2 }} aria-hidden>
-            <SeahorseIcon className="w-10 h-16" style={{ color: "var(--aqua-pale)" }} />
-          </div>
-          <div className="absolute top-1/3 right-1 opacity-[0.18] float-alt" style={{ zIndex: 2 }} aria-hidden>
-            <SeahorseIcon className="w-10 h-16" style={{ color: "var(--silver)" }} />
-          </div>
-
-          <div className="relative z-10 max-w-lg mx-auto">
-            <Reveal className="text-center mb-12">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>Dress Code</p>
-              <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-4"
-                style={{ textShadow: "0 2px 24px rgba(0,0,0,0.5)" }}>
-                Código de Vestimenta
-              </h2>
-              <p className="text-sm font-light mb-2" style={{ color: "rgba(255,255,255,0.7)" }}>
-                Te pedimos asistir de manera Elegante
-              </p>
-              <div className="flex items-center justify-center gap-8 mt-4">
-                <div className="flex flex-col items-center gap-2">
-                  <TuxedoIcon className="w-14 h-16" style={{ color: "var(--silver)", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }} />
-                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
-                    Hombres
-                  </span>
-                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
-                    Traje Elegante
-                  </span>
-                </div>
-                <div className="w-px h-20 opacity-25" style={{ background: "white" }} />
-                <div className="flex flex-col items-center gap-2">
-                  <LongDressIcon className="w-12 h-16" style={{ color: "var(--aqua-pale)", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }} />
-                  <span className="text-[10px] tracking-widest uppercase font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
-                    Mujeres
-                  </span>
-                  <span className="text-[11px] font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
-                    Vestido largo
-                  </span>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 3 color swatches */}
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              {/* Plata */}
-              <Reveal delay={0.1}>
-                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(196,216,224,0.4)", boxShadow: "0 0 20px rgba(196,216,224,0.15)" }}>
-                  <div className="h-24 sm:h-32 relative flex items-center justify-center"
-                    style={{ background: "linear-gradient(135deg, #8aaab8 0%, #c4d8e0 35%, #eef4f7 50%, #c4d8e0 70%, #8aaab8 100%)" }}>
-                    <div className="absolute inset-0 opacity-50"
-                      style={{ background: "linear-gradient(45deg,transparent 40%,rgba(255,255,255,0.5) 50%,transparent 60%)", backgroundSize: "200% 200%", animation: "silverShine 3s linear infinite" }} />
-                    <span className="font-display italic text-lg font-light relative z-10"
-                      style={{ color: "rgba(35,60,75,0.75)" }}>Plata</span>
-                  </div>
-                  <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
-                    <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      Silver
+                <Reveal delay={0.1}>
+                  <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>
+                    Regalos
+                  </p>
+                  <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-5">LLuvia de sobres </h2>
+                </Reveal>
+                <Reveal delay={0.2}>
+                  <p className="text-sm font-light leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>
+                    Tu compañía es el obsequio más preciado de esta noche. Quienes deseen honrar este momento con un detalle adicional, encontrarán en el sobre la forma más elegante de expresarlo.
+                  </p>
+                  <div className="rounded-2xl px-5 py-4"
+                    style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)" }}>
+                    <Gift className="w-5 h-5 mx-auto mb-2" style={{ color: "var(--gold-light)" }} />
+                    <p className="text-xs font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
+                      ✦ Con profundo agradecimiento por su presencia ✦
                     </p>
                   </div>
-                </div>
-              </Reveal>
+                </Reveal>
+              </div>
+            </section>
 
-              {/* Azul Noche */}
-              <Reveal delay={0.2}>
-                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(11,61,82,0.8)", boxShadow: "0 0 20px rgba(11,61,82,0.5)" }}>
-                  <div className="h-24 sm:h-32 relative flex items-center justify-center"
-                    style={{ background: "linear-gradient(135deg, #04121c 0%, #0b3d52 50%, #091e2c 100%)" }}>
-                    <span className="font-display italic text-lg font-light text-white opacity-80">Azul </span>
+            <WaveDivider from="var(--teal)" to="var(--foam)" />
+
+            {/* ── UBICACIÓN + TRANSPORTE ────────────────────────────────────────── */}
+            <section id="ubicacion" className="py-20 px-4 sm:px-6" style={{ background: "var(--foam)" }}>
+              <div className="max-w-md mx-auto text-center">
+                <Reveal className="mb-10">
+                  <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>¿Cómo llegar?</p>
+                  <h2 className="font-display italic text-4xl sm:text-5xl" style={{ color: "var(--text-dark)" }}>
+                    Ubicación
+                  </h2>
+                </Reveal>
+                <Reveal delay={0.1}>
+                  <div className="glass rounded-3xl p-8 sm:p-10 flex flex-col items-center"
+                    style={{ border: "1px solid var(--aqua-pale)" }}>
+                    <div className="w-14 h-14 rounded-2xl mb-5 flex items-center justify-center"
+                      style={{ background: "var(--aqua-pale)" }}>
+                      <MapPin className="w-7 h-7" style={{ color: "var(--teal)" }} />
+                    </div>
+                    <p className="font-display italic text-xl mb-1" style={{ color: "var(--text-dark)" }}>{EVENT.venue}</p>
+                    <p className="text-sm mb-7" style={{ color: "var(--text-mid)" }}>{EVENT.address}</p>
+                    <motion.a href={EVENT.mapsUrl} target="_blank" rel="noopener noreferrer"
+                      whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
+                      className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white text-sm tracking-widest uppercase font-medium"
+                      style={{ background: "linear-gradient(135deg, var(--ocean), var(--teal))", boxShadow: "0 8px 24px rgba(11,61,82,0.35)" }}>
+                      <ExternalLink className="w-4 h-4" /> Abrir en Google Maps
+                    </motion.a>
                   </div>
-                  <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
-                    <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      Oscuro
+                </Reveal>
+              </div>
+            </section>
+
+            <WaveDivider from="var(--foam)" to="var(--deep)" double />
+          </>
+        ) : (
+          <>
+            {/* ── TE ESPERAMOS (solo confirmacion) ─────────────────────────── */}
+            <WaveDivider from="var(--pearl)" to="var(--deep)" />
+
+            <section className="relative overflow-hidden"
+              style={{ background: "var(--deep)", paddingBottom: 0 }}>
+
+              {/* Background: subtle gradient + fish */}
+              <div className="absolute inset-0 pointer-events-none" style={{
+                background: "linear-gradient(180deg, var(--deep) 0%, #0b3d52 40%, #0f4f6a 70%, var(--deep) 100%)",
+              }} />
+              <Bubbles tint="rgba(58,164,184,0.3)" />
+              <SwimmingFish />
+
+              {/* Soft light rays */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+                <div style={{ position: "absolute", top: 0, left: "20%", width: 180, height: "70%",
+                  background: "linear-gradient(180deg, rgba(58,164,184,0.06) 0%, transparent 100%)",
+                  transform: "skewX(-8deg)" }} />
+                <div style={{ position: "absolute", top: 0, right: "25%", width: 120, height: "55%",
+                  background: "linear-gradient(180deg, rgba(58,164,184,0.04) 0%, transparent 100%)",
+                  transform: "skewX(6deg)" }} />
+              </div>
+
+              {/* Decorative elements — subtle */}
+              <div className="absolute top-12 left-5 opacity-[0.09] float" aria-hidden>
+                <SeahorseIcon className="w-12 h-20" style={{ color: "var(--aqua-pale)" }} />
+              </div>
+              <div className="absolute top-16 right-6 opacity-[0.08] float-alt" aria-hidden>
+                <StarfishIcon className="w-10 h-10" style={{ color: "var(--gold-light)" }} />
+              </div>
+              <div className="absolute bottom-32 left-6 opacity-[0.08] float-alt" aria-hidden>
+                <SandDollarIcon className="w-10 h-10" style={{ color: "var(--aqua-pale)" }} />
+              </div>
+              <div className="absolute bottom-36 right-5 opacity-[0.09] float" aria-hidden>
+                <JellyfishIcon className="w-8 h-12" style={{ color: "var(--silver)" }} />
+              </div>
+
+              <div className="relative z-10 max-w-md mx-auto text-center px-5 pt-20 pb-12">
+
+                {/* Top label + title */}
+                <Reveal>
+                  <p className="text-[10px] tracking-[0.35em] uppercase mb-4" style={{ color: "var(--aqua)" }}>
+                    Transporte
+                  </p>
+                  <h2 className="font-display italic font-light text-white mb-4"
+                    style={{
+                      fontSize: "clamp(2.8rem, 12vw, 5rem)",
+                      lineHeight: 1.05,
+                      textShadow: "0 0 60px rgba(58,164,184,0.25), 0 4px 30px rgba(0,0,0,0.4)",
+                    }}>
+                    Te esperamos
+                  </h2>
+                  <div className="h-px w-20 mx-auto mb-10"
+                    style={{ background: "linear-gradient(90deg, transparent, rgba(58,164,184,0.6), transparent)" }} />
+                </Reveal>
+
+                {/* ── CLOCK ── */}
+                <Reveal delay={0.12}>
+                  <DateTimeCard />
+                </Reveal>
+
+                <Reveal delay={0.15}>
+                  <div className="h-px w-16 mx-auto my-10"
+                    style={{ background: "linear-gradient(90deg, transparent, rgba(58,164,184,0.3), transparent)" }} />
+                </Reveal>
+
+                {/* Transport card — centered, clean */}
+                <Reveal delay={0.22}>
+                  <motion.div
+                    whileHover={{ y: -3 }}
+                    transition={{ duration: 0.28 }}
+                    className="rounded-3xl mb-5 overflow-hidden"
+                    style={{
+                      background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(58,164,184,0.2)",
+                      boxShadow: "0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)",
+                    }}>
+                    {/* Card header strip */}
+                    <div className="flex items-center justify-center gap-3 px-6 py-4"
+                      style={{ borderBottom: "1px solid rgba(58,164,184,0.15)", background: "rgba(58,164,184,0.08)" }}>
+                      <Bus className="w-4 h-4" style={{ color: "var(--aqua)" }} />
+                      <span className="text-[10px] tracking-[0.28em] uppercase" style={{ color: "var(--aqua)" }}>
+                        Punto de encuentro
+                      </span>
+                    </div>
+                    {/* Card body */}
+                    <div className="px-8 py-8 flex flex-col items-center gap-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                          style={{ background: "rgba(58,164,184,0.15)" }}>
+                          <MapPin className="w-4 h-4" style={{ color: "var(--aqua)" }} />
+                        </div>
+                        <div className="text-left">
+                          <p className="font-display italic text-white leading-snug"
+                            style={{ fontSize: "clamp(1rem, 4vw, 1.2rem)" }}>
+                            {EVENT.transportAddress}
+                          </p>
+                          <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
+                            Te pedimos llegar 10 min antes de la salida
+                          </p>
+                        </div>
+                      </div>
+                      <motion.a
+                        href={EVENT.transportMapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.03, y: -1 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white text-[11px] tracking-[0.18em] uppercase font-medium w-full justify-center"
+                        style={{
+                          background: "linear-gradient(135deg, var(--ocean), var(--teal))",
+                          boxShadow: "0 6px 20px rgba(11,61,82,0.5)",
+                        }}>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Ver en Google Maps
+                      </motion.a>
+                    </div>
+                  </motion.div>
+                </Reveal>
+
+                {/* Thank you */}
+                <Reveal delay={0.32}>
+                  <div className="flex flex-col items-center gap-4 pt-4 pb-2">
+                    <div className="flex items-center gap-3">
+                      <div className="h-px w-10" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2))" }} />
+                      <Heart className="w-4 h-4 shimmer" style={{ color: "var(--coral)" }} />
+                      <div className="h-px w-10" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.2), transparent)" }} />
+                    </div>
+                    <p className="font-display italic leading-snug"
+                      style={{ fontSize: "clamp(1.1rem, 4.5vw, 1.5rem)", color: "rgba(255,255,255,0.88)" }}>
+                      Gracias por acompañarnos
+                    </p>
+                    <p className="text-xs font-light max-w-xs" style={{ color: "rgba(255,255,255,0.42)", lineHeight: 1.7 }}>
+                      Su presencia es el regalo más grande de esta noche especial
                     </p>
                   </div>
-                </div>
-              </Reveal>
-
-              {/* Celeste */}
-              <Reveal delay={0.3}>
-                <div className="rounded-2xl sm:rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(135,206,219,0.5)", boxShadow: "0 0 20px rgba(135,206,219,0.18)" }}>
-                  <div className="h-24 sm:h-32 relative flex items-center justify-center"
-                    style={{ background: "linear-gradient(135deg, #c8eaf5 0%, #87cedb 45%, #b8e4f0 100%)" }}>
-                    <span className="font-display italic text-lg font-light"
-                      style={{ color: "rgba(20,80,100,0.75)" }}>Cielo</span>
-                  </div>
-                  <div className="px-2 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
-                    <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
-                      Celeste
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-
-            <Reveal delay={0.4}>
-              <div className="rounded-2xl px-5 py-4 text-center"
-                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}>
-                <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.6)" }}>
-                  ✦ Estos colores están reservados para la festejada y su familia ✦
-                </p>
+                </Reveal>
               </div>
-            </Reveal>
-          </div>
-        </section>
 
-        <WaveDivider from="var(--deep)" to="var(--ocean)" double />
-
-        {/* ── MENSAJE ──────────────────────────────────────────────────────── */}
-        <section className="relative py-24 px-4 sm:px-6 overflow-hidden"
-          style={{ background: "linear-gradient(150deg, var(--ocean) 0%, var(--teal) 60%, var(--aqua) 100%)" }}>
-          {/* Subtle white overlay to lighten background */}
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(255,255,255,0.13)", zIndex: 0 }} />
-          <Bubbles tint="rgba(180,235,244,0.3)" />
-          {/* Starfish */}
-          <div className="absolute top-8 right-8 opacity-20 float-alt">
-            <StarfishIcon className="w-12 h-12" style={{ color: "var(--gold-light)" }} />
-          </div>
-          <div className="absolute bottom-12 left-6 opacity-15 float">
-            <StarfishIcon className="w-8 h-8" style={{ color: "white" }} />
-          </div>
-          <div className="absolute top-6 left-4 opacity-15 float-alt" aria-hidden>
-            <JellyfishIcon className="w-10 h-14" style={{ color: "var(--gold-light)" }} />
-          </div>
-          <div className="absolute bottom-6 right-6 opacity-12 float" aria-hidden>
-            <SandDollarIcon className="w-12 h-12" style={{ color: "rgba(255,255,255,0.8)" }} />
-          </div>
-          <div className="relative z-10 max-w-xl mx-auto text-center">
-            <Reveal>
-              <TridentIcon className="w-12 h-16 mx-auto mb-8 shimmer" style={{ color: "var(--gold-light)" }} />
-            </Reveal>
-            <Reveal delay={0.15}>
-              <blockquote className="font-display italic leading-relaxed text-white mb-8"
-                style={{ fontSize: "clamp(1.4rem,5vw,2rem)", textShadow: "0 2px 20px rgba(0,0,0,0.2)" }}>
-                &ldquo;La vida es como el mar: llena de maravillas para quienes se atreven a explorarla.&rdquo;
-              </blockquote>
-            </Reveal>
-            <Reveal delay={0.25}>
-              <div className="flex items-center justify-center gap-3">
-                <div className="h-px w-10 shimmer" style={{ background: "var(--gold-light)" }} />
-                <p className="text-xs tracking-[0.25em] uppercase" style={{ color: "rgba(255,255,255,0.6)" }}>
-                  Con amor, tu familia
-                </p>
-                <div className="h-px w-10 shimmer" style={{ background: "var(--gold-light)" }} />
+              {/* Seabed — blends directly into footer (same dark color) */}
+              <div className="relative pointer-events-none" style={{ marginTop: 16 }} aria-hidden>
+                <UnderwaterScene className="w-full" style={{ height: 90, display: "block" }} />
               </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* Wave from mensaje to next section — depends on mode */}
-        {mode === "confirmacion"
-          ? <WaveDivider from="var(--aqua)" to="var(--sand)" />
-          : <WaveDivider from="var(--aqua)" to="var(--deep)" double />
-        }
-
-        {/* ── RSVP (solo en modo confirmacion) ─────────────────────────────── */}
-        {mode === "confirmacion" && (
-          <section id="rsvp" className="py-20 px-4 sm:px-6" style={{ background: "var(--sand)" }}>
-            <div className="max-w-md mx-auto text-center">
-              <Reveal>
-                <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>RSVP</p>
-                <h2 className="font-display italic text-4xl sm:text-5xl mb-4" style={{ color: "var(--text-dark)" }}>
-                  ¿Nos acompañas?
-                </h2>
-                <p className="text-sm font-light mb-10" style={{ color: "var(--text-mid)" }}>
-                  Confirma tu asistencia en un clic. Te esperamos con los brazos abiertos.
-                </p>
-              </Reveal>
-              <Reveal delay={0.15}>
-                <motion.button
-                  onClick={() => setModalOpen(true)}
-                  whileHover={{ scale: 1.04, y: -3 }} whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-3 px-10 py-5 rounded-2xl text-white text-sm tracking-[0.18em] uppercase font-medium pulse-glow"
-                  style={{
-                    background: "linear-gradient(135deg, var(--deep), var(--ocean), var(--teal))",
-                    boxShadow: "0 12px 36px rgba(11,61,82,0.45)",
-                  }}>
-                  <Sparkles className="w-4 h-4" />
-                  Confirmar asistencia
-                </motion.button>
-              </Reveal>
-            </div>
-          </section>
+            </section>
+          </>
         )}
-
-        {mode === "confirmacion" && <WaveDivider from="var(--sand)" to="var(--deep)" />}
-
-        {/* ── REGALOS ───────────────────────────────────────────────────────── */}
-        <section className="relative py-24 px-4 sm:px-6 overflow-hidden"
-          style={{ background: "linear-gradient(170deg, var(--deep) 0%, var(--ocean) 60%, var(--teal) 100%)" }}>
-          <FallingEnvelopes />
-          <div className="relative z-10 max-w-sm mx-auto text-center">
-            <Reveal>
-              <motion.div
-                animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="mx-auto mb-8" style={{ width: "clamp(90px,28vw,130px)" }}>
-                <EnvelopeLogoIcon className="w-full h-auto drop-shadow-xl" />
-              </motion.div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--aqua-pale)" }}>
-                Regalos
-              </p>
-              <h2 className="font-display italic text-4xl sm:text-5xl text-white mb-5">LLuvia de sobres </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="text-sm font-light leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>
-                Tu compañía es el obsequio más preciado de esta noche. Quienes deseen honrar este momento con un detalle adicional, encontrarán en el sobre la forma más elegante de expresarlo.
-              </p>
-              <div className="rounded-2xl px-5 py-4"
-                style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)" }}>
-                <Gift className="w-5 h-5 mx-auto mb-2" style={{ color: "var(--gold-light)" }} />
-                <p className="text-xs font-light" style={{ color: "rgba(255,255,255,0.55)" }}>
-                  ✦ Con profundo agradecimiento por su presencia ✦
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        <WaveDivider from="var(--teal)" to="var(--foam)" />
-
-        {/* ── UBICACIÓN + TRANSPORTE ────────────────────────────────────────── */}
-        <section id="ubicacion" className="py-20 px-4 sm:px-6" style={{ background: "var(--foam)" }}>
-          <div className="max-w-md mx-auto text-center">
-            <Reveal className="mb-10">
-              <p className="text-[11px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--ocean)" }}>¿Cómo llegar?</p>
-              <h2 className="font-display italic text-4xl sm:text-5xl" style={{ color: "var(--text-dark)" }}>
-                Ubicación
-              </h2>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <div className="glass rounded-3xl p-8 sm:p-10 flex flex-col items-center"
-                style={{ border: "1px solid var(--aqua-pale)" }}>
-                <div className="w-14 h-14 rounded-2xl mb-5 flex items-center justify-center"
-                  style={{ background: "var(--aqua-pale)" }}>
-                  <MapPin className="w-7 h-7" style={{ color: "var(--teal)" }} />
-                </div>
-                <p className="font-display italic text-xl mb-1" style={{ color: "var(--text-dark)" }}>{EVENT.venue}</p>
-                <p className="text-sm mb-7" style={{ color: "var(--text-mid)" }}>{EVENT.address}</p>
-                <motion.a href={EVENT.mapsUrl} target="_blank" rel="noopener noreferrer"
-                  whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white text-sm tracking-widest uppercase font-medium"
-                  style={{ background: "linear-gradient(135deg, var(--ocean), var(--teal))", boxShadow: "0 8px 24px rgba(11,61,82,0.35)" }}>
-                  <ExternalLink className="w-4 h-4" /> Abrir en Google Maps
-                </motion.a>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        <WaveDivider from="var(--foam)" to="var(--deep)" double />
 
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
         <footer className="relative py-16 px-4 sm:px-6 text-center overflow-hidden">
